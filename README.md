@@ -5,11 +5,11 @@
 
 运行需要的必要软件包括
 
--MySQL Server 8.0
--Connector for Python 8.0
--Python 3.7
--Django 3.0
--mysqlclient
+- MySQL Server 8.0
+- Connector for Python 8.0
+- Python 3.7
+- Django 3.0
+- mysqlclient
 
 Django和mysqlclient可通过pip安装
 
