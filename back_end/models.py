@@ -22,27 +22,27 @@ class Limit(models.Model):
 
 
 class Prohibition(models.Model):
-    user_id = models.ForeignKey('account.Account', on_delete=CASCADE)
-    blocked_permission = models.ForeignKey('account.Limit', on_delete=CASCADE)
+    user_id = models.ForeignKey('Account', on_delete=models.CASCADE)
+    blocked_permission = models.ForeignKey('Limit', on_delete=models.CASCADE)
     block_time = models.DateTimeField(auto_now_add=True)
     block_end_time = models.DateTimeField(auto_now=True)
 # 用户封禁表
 
 
 class UpShelfExamine(models.Model):
-    goods_id = models.ForeignKey('goods.Goods', on_delete=CASCADE)
+    goods_id = models.ForeignKey('Goods', on_delete=models.CASCADE)
 # 上架审核表
 
 
 class ComplaintExamine(models.Model):
-    complain_id = models.ForeignKey('account.Account', on_delete=CASCADE)
+    complain_id = models.ForeignKey('Account', on_delete=models.CASCADE)
 # 待投诉处理表
 
 
 class MyChar(models.Field):
     def __init__(self, max_length, unique, *args, **kwargs):
         self.max_length = max_length
-        super(MyCharField, self).__init__(max_length=max_length, unique=unique, *args, **kwargs)
+        super(MyChar, self).__init__(max_length=max_length, unique=unique, *args, **kwargs)
 
     def db_type(self, connection):
         return 'char(%s)' % self.max_length
@@ -61,8 +61,8 @@ class Book(models.Model):
 
 class Goods(models.Model):
     type = ((1, "上架中"), (2, "待处理"), (3, "已下架") )
-    book_id = models.ForeignKey('Book', on_delete=CASCADE)
-    merchant_id = models.ForeignKey('account.Account', on_delete=CASCADE)
+    book_id = models.ForeignKey('Book', on_delete=models.CASCADE)
+    merchant_id = models.ForeignKey('Account', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=19, decimal_places=4)
     description = models.TextField()
     status = models.IntegerField(choices=type)
@@ -70,24 +70,24 @@ class Goods(models.Model):
 
 
 class PersonalInfo(models.Model):
-    user_id = models.ForeignKey('account.Account', on_delete=CASCADE)
+    user_id = models.ForeignKey('Account', on_delete=models.CASCADE)
     student_id = models.IntegerField(unique=True)
-    mobile = models.DecimalField(max_digits=19, decimal_places=None)
+    mobile = models.DecimalField(max_digits=19, decimal_places=0)
     email = models.EmailField()
 # 个人信息表
 
 
 class TransRecord(models.Model):
-    costumer_id = models.ForeignKey('account.Account', on_delete=CASCADE)
-    merchant_id = models.ForeignKey('account.Account', on_delete=SET_DEFAULT, default=' ')
-    good_id = models.ForeignKey('goods.Goods', on_delete=DO_NOTHING)
+    costumer_id = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='costumer')
+    merchant_id = models.ForeignKey('Account', on_delete=models.SET_DEFAULT, default=' ', related_name='merchant')
+    good_id = models.ForeignKey('Goods', on_delete=models.DO_NOTHING)
     order_time = models.DateTimeField(auto_now_add=True)
 # 交易记录表
 
 
 class MessageRecord (models.Model):
-    from_id = models.ForeignKey('account.Account', on_delete=CASCADE)
-    to_id = models.ForeignKey('account.Account', on_delete=CASCADE)
+    from_id = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='from_id')
+    to_id = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='to_id')
     content = models.TextField()
 
 # Create your models here.
