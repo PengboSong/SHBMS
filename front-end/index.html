@@ -9,7 +9,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="bootstrap-4.4.1-dist/css/bootstrap.min.css">
-    <!-- jQuery, popper.js, Bootstrap JS -->	
+    <!-- jQuery, popper.js, Bootstrap JS -->
     <script src="jquery-3.4.1.slim.min.js"></script>
     <script src="popper.min.js"></script>
     <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
@@ -19,7 +19,7 @@
   </head>
   <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light pb-4 mb-4">
   <a class="navbar-brand" href="#">Brand</a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarContents" aria-controls="navbarContents" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -36,14 +36,8 @@
       <li class="nav-item">
         <a class="nav-link" href="#">Center</a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="helpMenuDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Help</a>
-        <div class="dropdown-menu" aria-labelledby="helpMenuDropdown">
-          <a class="dropdown-item" href="#">Notice</a>
-          <a class="dropdown-item" href="#">Guide</a>
-          <a class="dropdown-item" href="#">About Us</a>
-          <a class="dropdown-item" href="#">Contact Us</a>
-        </div>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Help</a>
       </li>
     </ul>
     <form class="form-inline mx-0 mx-sm-3 my-2 my-lg-0">
@@ -56,29 +50,44 @@
 
 <div class="container-fluid">
   <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar pl-2 pt-4 mt-4">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a role="button" class="nav-link active btn btn-outline-primary" href="#">
               Home <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Category I</a>
+          <li class="nav-item btn-group dropright">
+            <a role="button" class="nav-link btn btn-outline-primary dropdown-toggle" id="category1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category I</a>
+            <div class="dropdown-menu" aria-labelledby="category1_menu">
+              <a class="dropdown-item" href="#">Term I</a>
+              <a class="dropdown-item" href="#">Term II</a>
+              <a class="dropdown-item" href="#">Term III</a>
+            </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Category II</a>
+          <li class="nav-item btn-group dropright">
+            <a role="button" class="nav-link btn btn-outline-primary dropdown-toggle" id="category2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category II</a>
+            <div class="dropdown-menu" aria-labelledby="category2_menu">
+              <a class="dropdown-item" href="#">Term I</a>
+              <a class="dropdown-item" href="#">Term II</a>
+              <a class="dropdown-item" href="#">Term III</a>
+            </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Category III</a>
+          <li class="nav-item btn-group dropright">
+            <a role="button" class="nav-link btn btn-outline-primary dropdown-toggle" id="category3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category III</a>
+            <div class="dropdown-menu" aria-labelledby="category3_menu">
+              <a class="dropdown-item" href="#">Term I</a>
+              <a class="dropdown-item" href="#">Term II</a>
+              <a class="dropdown-item" href="#">Term III</a>
+            </div>
           </li>
         </ul>
       </div>
     </nav>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-5 pb-3 mb-3 border-bottom">
+      <div class="d-flex flex-wrap flex-md-nowrap align-items-center pb-3 mb-3 border-bottom">
         <div id="carouselNotices" class="carousel slide" data-ride="carousel">
           <ol class="carousel-indicators">
             <li data-target="#carouselNotices" data-slide-to="0" class="active"></li>

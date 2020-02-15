@@ -1,3 +1,8 @@
+*.jpg
+*.jpeg
+*.png
+*.bmp
+
 *.pyc
 SHBMS/__pycache__/*
 main/__pycache__/*
