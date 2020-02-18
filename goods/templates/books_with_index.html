@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>搜索结果</title>
+
+</head>
+
+<body>
+
+    <div>
+
+        <a href="{% url 'home' %}">
+
+            <h3>主页</h3>
+
+        </a>
+
+    </div>
+
+    <hr>
+    {%if books %}
+
+    {% for book in books %}
+
+        <a href="{% url 'book_detail' book.id %}">
+
+            <h3>{{ book.full_title }}</h3>    
+
+        </a>
+     {% endfor %}
+
+    {% else %}
+           {% for isbn in book_isbn %}
+
+                 <a href="{% url 'book_detail' book.id %}">
+
+                       <h3>{{ book.full_title }}</h3>  
+                  </a>
+ 
+           {% empty %} 
+
+                <p>暂无上架书籍，</p>
+
+                <a href="{% url 'create_new_book' %}"><p>点此上架</p></a>
+
+           {% endfor %}
+
+    {% endif %}
+
+
+</body>
+
+</html>

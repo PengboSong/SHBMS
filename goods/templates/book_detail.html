@@ -1,0 +1,60 @@
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>{{ blog.title }}</title>
+
+</head>
+
+<body>
+
+    <div>
+
+        <a href="{% url 'home' %}">
+
+            <h3>主页</h3>
+
+        </a>
+
+    </div>
+     <hr>
+    <h3>{{ book.full_title }}</h3>
+
+    <p>作者：{{ book.authors }}</p>
+    <p>ISBN编号：{{ book.ISBN_num }}</p>
+    <p>出版商：{{ book.publisher }}</p>
+    <p>原价：{{ book.original_price }}</p>
+
+    <p>分类：
+
+        <a href="{% url 'books_with_type' book.book_type.pk %}">
+
+            {{ book.book_type }}
+
+        </a>
+
+    </p>
+        <a href="{% url 'up_shelf' book.pk %}"><h3>点此上架此书</h3></a>
+
+    <hr>
+
+    <h3>此处为该书已上架信息</h3>
+    
+    {% for good in goods %}
+
+    <p>卖家：{{good.merchant}}           价格：{{ good.price }}</p><a href='.'>点击查看更多</a>
+     
+    {% empty %}
+
+    <p>暂无卖家上架，敬请期待</p>
+    
+    {% endfor %}
+        
+
+
+</body>
+
+</html>

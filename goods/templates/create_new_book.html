@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>增加书籍信息</title>
+
+</head>
+
+<body>
+   <h3>增加书籍信息</h3>
+    <hr>
+
+    <form action="/book/create/" method="POST" enctype="multipart/form-data">
+
+      <table>
+
+        {{ obj }}
+
+    <p>上传图片  <input type="file" name="pic"></p>
+
+    </table>
+
+    <input type="submit" value="提交"> 
+
+    </form>
+
+</body>
+
+</html>

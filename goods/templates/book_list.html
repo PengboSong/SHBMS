@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>二手书交易平台</title>
+
+</head>
+
+<body>
+
+    <div>
+
+        <a href="{% url 'home' %}">
+
+            <h3>主页</h3>
+
+        </a>
+
+    </div>
+
+    <hr>
+
+    {% for book in books %}
+
+        <a href="{% url 'book_detail' book.pk %}">
+
+            <h3>{{ book.full_title }}</h3>    
+
+        </a>
+
+        <p>{{ book.ISBN_num }}</p>
+
+    {% empty %}
+
+        <p>-- 暂无上架书籍，敬请期待 --</p>
+
+    {% endfor %}
+
+    <p>一共有{{ books|length }}本书</p>
+
+</body>
+
+</html>
