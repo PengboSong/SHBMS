@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'main.apps.MainConfig',
     'homepage',
     'goods',
 ]
@@ -78,12 +77,25 @@ WSGI_APPLICATION = 'SHBMS.wsgi.application'
 
 # Use SQLite
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+#     }
+# }
+
+# Use MySQL
+
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-     }
- }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shbms_db',
+        'USER': 'SHBMS_USER',
+        'PASSWORD': 'E3Y8G32bPu&y',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+}
 
 
 # Password validation
