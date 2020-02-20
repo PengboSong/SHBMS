@@ -1,0 +1,46 @@
+from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
+from goods.models import Goods
+
+
+class Account(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    business_account = models.BooleanField(default=False)
+# 用户表
+
+
+class PersonalInfo(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    student_id = models.IntegerField(unique=True)
+    mobile = models.DecimalField(max_digits=19, decimal_places=0)
+    email = models.EmailField()
+# 个人信息表
+
+
+class TransRecord(models.Model):
+    book = models.ForeignKey('goods.Book', on_delete=models.CASCADE)
+    costumer = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='costumer')
+    goods = models.ForeignKey('goods.Goods', on_delete=models.DO_NOTHING)
+    order_time = models.DateTimeField(auto_now_add=True)
+# 交易记录表
+
+
+class MessageRecord (models.Model):
+    good_id = models.ForeignKey(Goods, on_delete=models.CASCADE)
+    from_id = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='+')
+    to_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    comment_time = models.DateTimeField(auto_now_add=True)
+    content = models.TextField(blank=False)
+
+    def short_content(self):
+        if len(str(self.content)) > 30:
+            return '{}...'.format(str(self.content)[0:30])
+        else:
+            return str(self.content)
+    short_content.allow_tags = True
+
+# 留言表
+
+# Create your models here.

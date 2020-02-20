@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 	'main.apps.MainConfig',
     'homepage',
     'goods',
+    'center',
 ]
 
 MIDDLEWARE = [

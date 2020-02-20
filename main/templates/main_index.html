@@ -1,9 +1,0 @@
-{% if latest_msg_list %}
-    <ul>
-    {% for msg in latest_msg_list %}
-        <li><a href="{% url 'main:detail' msg.id %}">{{ msg.msg_text }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No messages available.</p>
-{% endif %}

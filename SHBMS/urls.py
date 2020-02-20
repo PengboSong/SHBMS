@@ -32,4 +32,5 @@ urlpatterns = [
     path('help/', site_help, name='site_help'),
     path('center/', center, name='center'),
     path('introduce/', site_introduce, name='site_detail'),
+    path('login/', login, name='login')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
