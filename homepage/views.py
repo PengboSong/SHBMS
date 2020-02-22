@@ -21,17 +21,11 @@ def homepage(request):
 
     return render(request, 'homepage.html', context)
 
-
 def personal_center(request):
     return render(request, 'homepage.html', {})
 
-
 def site_help(request):
     return render(request, 'help.html', {})
-
-
-def site_introduce(request):
-    pass
 
 def search(request):
     book_name = request.POST.get('book_index', None)
@@ -55,5 +49,3 @@ def login(request):
         return render(request, 'error.html', {'message': '用户名或密码不正确'})
     else:
         return render(request, 'login.html')
-
-# Create your views here.
