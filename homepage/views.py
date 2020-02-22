@@ -4,20 +4,20 @@ from goods.models import Book
 
 
 def homepage(request):
-    return render(request, 'homepage.html', {})
+    return render(request, 'index.html', {})
 
+def explore(request):
+    return render(request, 'explore.html', {})
 
 def center(request):
-    return HttpResponse('这里是个人中心')
-
+    return render(request, 'personal_center.html', {})
 
 def site_help(request):
-    return HttpResponse('这里是帮助中心')
+    return render(request, 'help.html', {})
 
 
 def site_introduce(request):
-    return HttpResponse('这里是网页详情页')
-
+    pass
 
 def search(request):
     book_name = request.POST.get('book_index', None)
@@ -28,6 +28,3 @@ def search(request):
     }
     print(book_isbn)
     return render(request, 'books_with_index.html', context)
-
-
-# Create your views here.

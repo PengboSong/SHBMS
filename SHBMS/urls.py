@@ -23,7 +23,6 @@ from . import settings
 
 
 urlpatterns = [
-	path('main/', include('main.urls')),
     path('admin/', admin.site.urls),
     path('', homepage, name='home'),
     path('book/', include('goods.urls')),
@@ -31,5 +30,6 @@ urlpatterns = [
     path('search/', search, name='search'),
     path('help/', site_help, name='site_help'),
     path('center/', center, name='center'),
+    path('explore/', center, name='explore'),
     path('introduce/', site_introduce, name='site_detail'),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

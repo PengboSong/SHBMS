@@ -8,11 +8,11 @@
     <title>Personal Center</title>
 
     <!-- Bootstrap core CSS -->
-	<link rel="stylesheet" href="bootstrap-4.4.1-dist/css/bootstrap.min.css">
-	<!-- jQuery, popper.js, Bootstrap JS -->	
-	<script src="jquery-3.4.1.slim.min.js"></script>
-	<script src="popper.min.js"></script>
-	<script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.4.1.min.css' %}">
+    <!-- jQuery, popper.js, Bootstrap JS -->
+    <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
 
     <!-- Custom styles for this template -->
     <!-- link rel="stylesheet" href="personal_center.css" -->
@@ -22,11 +22,10 @@
     }
   </style>
   </head>
-
 <body class="bg-light">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light pb-2 mb-2">
-  <a class="navbar-brand" href="#">Brand</a>
+  <a class="navbar-brand" href="{% url 'home' %}">Brand</a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarContents" aria-controls="navbarContents" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -34,21 +33,21 @@
   <div class="collapse navbar-collapse" id="navbarContents">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#">Index</a>
+        <a class="nav-link" href="{% url 'home' %}">Index</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Explore</a>
+        <a class="nav-link" href="{% url 'explore' %}">Explore</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="#">Center<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'center' %}">Center<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Help</a>
+        <a class="nav-link" href="{% url 'site_help' %}">Help</a>
       </li>
     </ul>
-    <form class="form-inline mx-0 mx-md-3 my-2 my-md-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-md-0" type="submit">Search</button>
+    <form action="/search/" method="POST" enctype="multipart/form-data" class="form-inline mx-0 mx-md-3 my-2 my-md-0">
+      <input class="form-control mr-sm-2" name="book_index" type="text" placeholder="Book name / ISBN number" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-md-0" type="submit" value="submit_search_query">Search</button>
     </form>
     <button class="btn btn-primary my-2 my-md-0" type="submit">Sign in</button>
   </div>
@@ -87,7 +86,7 @@
       <div class="row">
         <div class="col-md-2">        
           <button class="btn btn-light dropdown-toggle" type="button" id="lg-portrait" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="photo001.jpg" class="portrait-cycle" width="80%">
+            <img src="{% static 'image/sample_portrait001.jpg' %}" class="portrait-cycle" width="80%">
           </button>
           <div class="dropdown-menu" aria-labelledby="portrait-menu">
             <a class="dropdown-item" href="#">Change photo</a>
@@ -102,19 +101,19 @@
           <h2 class="border-top mt-4 pt-2">My Books</h2>
           <div class="row my-3">
             <div class="card col-md-3">
-              <img src="pic001.jpg" class="card-img-top" alt="Book 1">
+              <img src="{% static 'image/sample_book001.jpg' %}" class="card-img-top" alt="Book 1">
               <div class="card-body">
                 <p class="card-text">Image desc</p>
               </div>
             </div>
             <div class="card col-md-3">
-              <img src="pic002.jpg" class="card-img-top" alt="Book 2">
+              <img src="{% static 'image/sample_book002.jpg' %}" class="card-img-top" alt="Book 2">
               <div class="card-body">
                 <p class="card-text">Image desc</p>
               </div>
             </div>
             <div class="card col-md-3">
-              <img src="pic003.jpg" class="card-img-top" alt="Book 3">
+              <img src="{% static 'image/sample_book003.jpg' %}" class="card-img-top" alt="Book 3">
               <div class="card-body">
                 <p class="card-text">Image desc</p>
               </div>
@@ -137,7 +136,7 @@
             <tbody>
               <tr>
                 <td>
-                  <img src="pic001.jpg" width="80" alt="Book 1">
+                  <img src="{% static 'image/sample_book001.jpg' %}" width="80" alt="Book 1">
                 </td>
                 <td><strong>Book name 1</strong></td>
                 <td>Me</td>
@@ -150,7 +149,7 @@
               </tr>
               <tr>
                 <td>
-                  <img src="pic002.jpg" width="80" alt="Book 2">
+                  <img src="{% static 'image/sample_book002.jpg' %}" width="80" alt="Book 2">
                 </td>
                 <td><strong>Book name 2</strong></td>
                 <td>Me</td>
@@ -163,7 +162,7 @@
               </tr>
               <tr>
                 <td>
-                  <img src="pic003.jpg" width="80" alt="Book 3">
+                  <img src="{% static 'image/sample_book003.jpg' %}" width="80" alt="Book 3">
                 </td>
                 <td><strong>Book name 3</strong></td>
                 <td>Me</td>
