@@ -1,0 +1,86 @@
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>二手书交易平台</title>
+
+</head>
+
+<body>
+
+   {% if user.is_authenticated %}
+               
+        <h2>二手书交易平台</h2>
+
+        <hr>
+
+        <a href="{% url 'personal_center' user.pk %}">
+          
+          <p>个人中心</p>
+
+        </a>
+
+        <form action="/search/" method="POST" enctype="multipart/form-data">
+           <p>
+               搜索
+                <input name="book_index" type="text" style="line-height: 30px;border: none;outline:none" placeholder="  ISBN编号或者书名" required>
+                <input type="submit" value="提交"/>
+           </p>
+        </form>
+ 
+
+        <a href="{% url 'site_help' %}">
+   
+          <p>帮助</p>
+
+        </a>
+
+        <a href="{% url 'site_detail' %}">   
+
+          <p>网站详情</p>
+
+        </a>
+
+        <a href="{% url 'book' %}">   
+
+          <p>图书列表 </p>
+
+        </a>  
+
+        <hr>
+	
+	<h3>标签索引</h3>
+
+	{% for type in types %}
+
+        <a href="{% url 'books_with_type' type.pk %}">{{ type.type_name}}</a>
+	
+	{% endfor %}
+
+	
+	<hr>
+	
+	<h3>图片索引</h3>
+
+	<p># 此处显示图书列表前三本书的图片，点击进入详情页</p>
+
+	{% load static %} 
+
+	{% for book in books %}
+
+        <a href="{% url 'book_detail' book.pk %}"><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></a>
+	
+	{% endfor %}
+
+    {% else %}
+     
+        <p>您未登录，<a href="{% url 'login' %}">点此登录</a></p>
+
+
+    {% endif %}
+		
+
+</body>
+
+</html>

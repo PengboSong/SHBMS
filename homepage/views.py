@@ -1,16 +1,30 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-from goods.models import Book
+from django.shortcuts import render, redirect
+from goods.models import Book, BookType
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 
 def homepage(request):
-    return render(request, 'index.html', {})
+    types = BookType.objects.all()
+    books = Book.objects.all()
+    show_books = []
+    for i in range(3):
+        if books[i]:
+            show_books.append(books[i])
+        else:
+            break
+    context = {
+        'types': types,
+        'books': show_books,
+    }
 
-def explore(request):
-    return render(request, 'explore.html', {})
+    return render(request, 'homepage.html', context)
 
-def center(request):
-    return render(request, 'personal_center.html', {})
+
+def personal_center(request):
+    return render(request, 'homepage.html', {})
+
 
 def site_help(request):
     return render(request, 'help.html', {})
@@ -28,3 +42,18 @@ def search(request):
     }
     print(book_isbn)
     return render(request, 'books_with_index.html', context)
+
+
+def login(request):
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(request, username=username, password=password)
+    if user is not None:
+        auth.login(request, user)
+        return redirect('/')
+    elif username:
+        return render(request, 'error.html', {'message': '用户名或密码不正确'})
+    else:
+        return render(request, 'login.html')
+
+# Create your views here.
