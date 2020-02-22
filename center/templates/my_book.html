@@ -38,7 +38,11 @@
 	<p>
 		书籍状态：{{my_good.get_status_display}}
 
-		<a href="{% url 'good_detail' my_good.book.pk%}">点此修改书籍状态</a>
+		<p>
+			修改书籍状态：
+			<a href="{% url 'del_good' my_good.pk %}" >删除记录</a>  
+			<a href="{% url 'sell_good' my_good.pk %}">书籍卖出</a>
+		</p>
 		
 	</p>
 

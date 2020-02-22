@@ -23,14 +23,13 @@ from . import settings
 
 
 urlpatterns = [
-	path('main/', include('main.urls')),
     path('admin/', admin.site.urls),
     path('', homepage, name='home'),
     path('book/', include('goods.urls')),
     path('book/', book_list, name='book'),
     path('search/', search, name='search'),
     path('help/', site_help, name='site_help'),
-    path('center/', center, name='center'),
+    path('center/', include('center.urls')),
     path('introduce/', site_introduce, name='site_detail'),
     path('login/', login, name='login')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

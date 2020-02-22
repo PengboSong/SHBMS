@@ -31,6 +31,9 @@
 	<p>评论内容：{{my_comment.content}}</p>
 	
 	<p>评论时间：{{my_comment.comment_time}}</p>
+
+	<a href=/center/reply/{{ my_comment.pk }}>点此回复</a>
+
 	{% empty %}
 
 	<p>暂无评论</p>
