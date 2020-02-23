@@ -87,4 +87,3 @@ def reply(request, comment_id):
         return HttpResponse('评论成功')
     else:
         return render(request, 'reply.html', {'comment':comment})
-# Create your views here.

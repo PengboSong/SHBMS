@@ -29,6 +29,8 @@ urlpatterns = [
     path('book/', book_list, name='book'),
     path('search/', search, name='search'),
     path('help/', site_help, name='site_help'),
+    path('explore/', explore, name='explore'),
     path('center/', include('center.urls')),
-    path('introduce/', site_introduce, name='site_detail'),
+    path('login/', login, name='login'),
+    path('logout/', logout, name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

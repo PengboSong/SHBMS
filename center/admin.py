@@ -18,5 +18,3 @@ class TransAdmin(admin.ModelAdmin):
 
 admin.site.register(MessageRecord, ViewAdmin)
 admin.site.register(TransRecord, TransAdmin)
-
-# Register your models here.

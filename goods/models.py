@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+# 自定义字符类型
 class MyChar(models.Field):
     def __init__(self, max_length, unique, *args, **kwargs):
         self.max_length = max_length
@@ -9,9 +10,8 @@ class MyChar(models.Field):
 
     def db_type(self, connection):
         return 'char(%s)' % self.max_length
-# 自定义数据（char）
 
-
+# 书籍类型表
 class BookType(models.Model):
 
     type_name = models.CharField(max_length=15)
@@ -19,9 +19,7 @@ class BookType(models.Model):
     def __str__(self):
         return self.type_name
 
-# 书籍类型表
-
-
+# 书籍信息表
 class Book(models.Model):
     book_type = models.ForeignKey(BookType, on_delete=models.DO_NOTHING)
     full_title = models.CharField(max_length=255)
@@ -30,9 +28,8 @@ class Book(models.Model):
     authors = models.CharField(max_length=255)
     picture = models.ImageField(upload_to='books_images')
     original_price = models.DecimalField(max_digits=19, decimal_places=2)
-# 书籍信息表
 
-
+# 商品表
 class Goods(models.Model):
     type = ((1, "上架中"), (2, "待处理"), (3, "已下架") )
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
@@ -42,6 +39,3 @@ class Goods(models.Model):
     picture_1 = models.ImageField(upload_to='goods_images', blank=False)
     picture_2 = models.ImageField(upload_to='goods_images', blank=True)
     status = models.IntegerField(choices=type)
-# 商品表
-
-# Create your models here.

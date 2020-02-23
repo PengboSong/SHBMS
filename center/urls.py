@@ -3,7 +3,6 @@ from . import views
 from django.contrib.auth.models import User
 
 urlpatterns = [
-
     # http://localhost:8000/center/user_id
     path('<int:user_id>', views.personal_center, name="personal_center"),
     path('personal_info/<int:user_id>', views.personal_info, name="personal_info"),
@@ -13,5 +12,4 @@ urlpatterns = [
     path('sell_good/<int:good_id>', views.sell_good, name='sell_good'),
     path('my_comment/<int:user_id>', views.my_comment, name='my_comment'),
     path('reply/<int:comment_id>', views.reply, name='reply')
-
 ]

@@ -83,11 +83,7 @@ def comment(request, good_id):
     }
     if request.method == "POST":
         view = request.POST.get('comment')
-        MessageRecord.objects.create(content=view, from_id=request.user,                                      to_id=good.merchant, good_id=good, comment_time=timezone.now)
+        MessageRecord.objects.create(content=view, from_id=request.user, to_id=good.merchant, good_id=good, comment_time=timezone.now)
         return HttpResponse('评论成功')
     else:
         return render(request, 'comment.html', context)
-
-
-# Create your views here.
-

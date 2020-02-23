@@ -19,10 +19,10 @@ def homepage(request):
         'books': show_books,
     }
 
-    return render(request, 'homepage.html', context)
+    return render(request, 'index.html', context)
 
-def personal_center(request):
-    return render(request, 'homepage.html', {})
+def explore(request):
+    return render(request, 'explore.html', {})
 
 def site_help(request):
     return render(request, 'help.html', {})
@@ -37,7 +37,6 @@ def search(request):
     print(book_isbn)
     return render(request, 'books_with_index.html', context)
 
-
 def login(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
@@ -49,3 +48,6 @@ def login(request):
         return render(request, 'error.html', {'message': '用户名或密码不正确'})
     else:
         return render(request, 'login.html')
+
+def logout(request):
+    pass
