@@ -5,9 +5,12 @@
 
     <meta charset="UTF-8">
 
-    <title>{{ blog.title }}</title>
+    <title>{{ book.title }}</title>
 
 </head>
+<style>
+pre{font-size: 16px; font-family: "微软雅黑";}
+</style>
 
 <body>
 
@@ -22,8 +25,9 @@
     </div>
      <hr>
     <h3>{{ book.full_title }}</h3>
-
+    <img src="{{ book.picture.url}}"  alt="" height="35%" width="18%">
     <p>作者：{{ book.authors }}</p>
+    
     <p>ISBN编号：{{ book.ISBN_num }}</p>
     <p>出版商：{{ book.publisher }}</p>
     <p>原价：{{ book.original_price }}</p>
@@ -45,14 +49,22 @@
     
     {% for good in goods %}
 
-    <p>卖家：{{good.merchant}}           价格：{{ good.price }}</p><a href='.'>点击查看更多</a>
+	<pre>卖家：{{good.merchant}}      价格：{{ good.price }}    <a href="{% url 'good_detail' good.pk %}">点击查看更多</a></pre>
+    
      
     {% empty %}
 
     <p>暂无卖家上架，敬请期待</p>
     
     {% endfor %}
-        
+     
+	<pre>
+
+
+
+
+
+	</pre>
 
 
 </body>

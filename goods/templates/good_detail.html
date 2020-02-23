@@ -1,0 +1,58 @@
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>{{ good.title }}</title>
+
+</head>
+
+<body>
+
+    <div>
+
+        <a href="{% url 'home' %}">
+
+            <h3>主页</h3>
+
+        </a>
+
+    </div>
+     <hr>
+
+    <h3>{{ my_good.book.full_title }}</h3>
+    <p>
+        <img src="{{ good.picture_1.url}}"  alt="" height="35%" width="18%">
+
+	{% if good.picture_2 %}
+
+        <img src="{{ good.picture_2.url}}"  alt="" height="35%" width="18%">
+
+	{% endif %}
+    </p>
+
+    <p>卖家：{{ good.merchant }}</p>
+
+    <p>
+        描述：{{ good.description}}
+    </p>
+
+    <p>{{ user.username }}，如果想购买此书，请<a href="{% url 'comment' good.pk %}">点击此处</a>与卖家联系</p>
+
+
+    <hr>
+
+	<pre>
+
+
+
+
+
+	</pre>
+
+
+</body>
+
+</html>

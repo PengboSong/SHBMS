@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Book, Goods, BookType
 from . import form
+from django.utils import timezone
+from center.models import MessageRecord
+from django.contrib.auth.models import User
 
 
 def book_list(request):
@@ -66,6 +69,24 @@ def up_shelf(request, book_id):
     else:
         obj2 = form.GoodsModelForm()
         return render(request, "up_shelf.html", {'obj2': obj2, 'book': book[0]})
+
+
+def good_detail(request, good_id):
+    good = get_object_or_404(Goods, pk=good_id)
+    return render(request, "good_detail.html", {'good': good})
+
+
+def comment(request, good_id):
+    good = get_object_or_404(Goods, pk=good_id)
+    context = {
+        'good': good
+    }
+    if request.method == "POST":
+        view = request.POST.get('comment')
+        MessageRecord.objects.create(content=view, from_id=request.user,                                      to_id=good.merchant, good_id=good, comment_time=timezone.now)
+        return HttpResponse('评论成功')
+    else:
+        return render(request, 'comment.html', context)
 
 
 # Create your views here.

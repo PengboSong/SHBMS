@@ -20,10 +20,11 @@ class PersonalInfo(models.Model):
 
 
 class TransRecord(models.Model):
-    book = models.ForeignKey('goods.Book', on_delete=models.CASCADE)
-    costumer = models.ForeignKey('Account', on_delete=models.CASCADE, related_name='costumer')
-    goods = models.ForeignKey('goods.Goods', on_delete=models.DO_NOTHING)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, default='')
+    costumer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='costumer')
+    goods = models.CharField(max_length=255)
     order_time = models.DateTimeField(auto_now_add=True)
+    price = models.DecimalField(max_digits=19, decimal_places=2, default=0)
 # 交易记录表
 
 
