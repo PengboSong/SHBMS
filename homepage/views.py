@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 
 
+# 用于将一个书籍列表按销量排序。销量来源：交易记录
 def sort_book(book_list):
     all_tans = TransRecord.objects.all()
     num_list = []
@@ -29,6 +30,7 @@ def sort_book(book_list):
     return show_books
 
 
+# 主页：内含所有书籍销量top3和书籍按类型分类各类型top3
 def homepage(request):
     types = BookType.objects.all()
     books = Book.objects.all()
@@ -58,6 +60,7 @@ def site_introduce(request):
     return HttpResponse('这里是网页详情页')
 
 
+# 搜索界面，可以按照isbn编号或者书本标题进行搜索
 def search(request):
     book_name = request.POST.get('book_index', None)
     book_isbn = book_name
@@ -69,6 +72,7 @@ def search(request):
     return render(request, 'books_with_index.html', context)
 
 
+# 登录界面，若用户未登录则禁止进入网页
 def login(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
