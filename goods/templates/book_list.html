@@ -4,6 +4,7 @@
 <html>
 
 <head>
+	{% extends 'homepage.html' %}
 
     <meta charset="UTF-8">
 
@@ -13,15 +14,8 @@
 
 <body>
 
-    <div>
 
-        <a href="{% url 'home' %}">
-
-            <h3>主页</h3>
-
-        </a>
-
-    </div>
+	{% block base%}
 
     <hr>
 
@@ -42,6 +36,7 @@
     {% endfor %}
 
     <p>一共有{{ books|length }}本书</p>
+    {% endblock %}
 
 </body>
 

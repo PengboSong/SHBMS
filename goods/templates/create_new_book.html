@@ -5,12 +5,14 @@
 <head>
 
     <meta charset="UTF-8">
-
+    {% extends 'homepage.html' %}
+    
     <title>增加书籍信息</title>
 
 </head>
 
 <body>
+    {% block base%}
    <h3>增加书籍信息</h3>
     <hr>
 
@@ -27,6 +29,7 @@
     <input type="submit" value="提交"> 
 
     </form>
+    {% endblock %}
 
 </body>
 

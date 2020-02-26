@@ -5,22 +5,15 @@
 <head>
 
     <meta charset="UTF-8">
-
+    
+    {% extends 'homepage.html' %}
     <title>{{ book_type.type_name }}</title>
 
 </head>
 
 <body>
+    {% block base%}
 
-    <div>
-
-        <a href="{% url 'home' %}">
-
-            <h3>主页</h3>
-
-        </a>
-
-    </div>
      <h2>{{book_type.type_name}}</h2>
 
     <hr>
@@ -42,6 +35,7 @@
     {% endfor %}
 
     <p>一共有{{ books|length }}本书</p>
+    {% endblock %}
 
 </body>
 

@@ -9,6 +9,8 @@
 
 <body>
 
+
+
    {% if user.is_authenticated %}
                
         <h2>二手书交易平台</h2>
@@ -41,7 +43,8 @@
           <p>网站详情</p>
 
         </a>
-
+	 {% block base%}
+	
         <a href="{% url 'book' %}">   
 
           <p>图书列表 </p>
@@ -52,26 +55,97 @@
 	
 	<h3>标签索引</h3>
 
+
 	{% for type in types %}
 
         <a href="{% url 'books_with_type' type.pk %}">{{ type.type_name}}</a>
 	
 	{% endfor %}
-
 	
 	<hr>
-	
-	<h3>图片索引</h3>
 
-	<p># 此处显示图书列表前三本书的图片，点击进入详情页</p>
+	
+	<h3>幻灯片内容</h3>
+
+	<p># 此处显示总图书列表按交易成功记录排行前三本书的信息，点击图片进入详情页</p>
 
 	{% load static %} 
 
 	{% for book in books %}
 
         <a href="{% url 'book_detail' book.pk %}"><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></a>
+        <p>作者：{{book.authors}}</p>
+        <p>标题：{{book.full_title}}</p>
+        <p>排名：{{ forloop.counter }}</p>
 	
 	{% endfor %}
+
+	{% endblock %}
+	<hr>
+
+        <h3>索引排名内容</h3>
+
+        <h3>标签显示top3</h3>
+	<p>理学</p>
+	{% for i in 理学 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>医学</p>
+	{% for i in 医学 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>计算机技术</p>
+	{% for i in 计算机技术 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>工学</p>
+	{% for i in 工学 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>人文</p>
+	{% for i in 人文 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>法律</p>
+	{% for i in 法律 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>经济管理</p>
+	{% for i in 经济管理 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>语言学</p>
+	{% for i in 语言学 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p>心理学</p>
+	{% for i in 心理学 %}
+		<p>作者：{{ i.authors}}</p>
+        	<p>标题：{{ i.full_title}}</p>
+		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
+	{% endfor %}
+	<p># 暂时列这么几个,基本一个套路</p>
+
+
+	
+
+
 
     {% else %}
      
@@ -82,5 +156,6 @@
 		
 
 </body>
+
 
 </html>

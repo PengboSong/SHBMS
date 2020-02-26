@@ -3,10 +3,12 @@
     <meta charset="UTF-8">
 
     <title>评论留言</title>
+    {% extends 'homepage.html' %}
 
 </head>
 
 <body>
+   	{% block base%}
 
 	<form method="POST" action="/book/comment/{{good.pk}}">
 
@@ -14,6 +16,7 @@
 
 		 <input type="submit" value="留言"/>
         </form>
+	{% endblock %}
 
  
 </body>

@@ -6,21 +6,16 @@
 
     <meta charset="UTF-8">
 
+     {% extends 'homepage.html' %}
+
     <title>搜索结果</title>
 
 </head>
 
 <body>
 
-    <div>
 
-        <a href="{% url 'home' %}">
-
-            <h3>主页</h3>
-
-        </a>
-
-    </div>
+	{% block base%}
 
     <hr>
     {%if books %}
@@ -51,6 +46,7 @@
            {% endfor %}
 
     {% endif %}
+	{% endblock %}
 
 
 </body>

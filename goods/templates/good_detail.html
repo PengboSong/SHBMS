@@ -4,6 +4,7 @@
 <head>
 
     <meta charset="UTF-8">
+    {% extends 'homepage.html' %}
 
     <title>{{ good.title }}</title>
 
@@ -11,15 +12,7 @@
 
 <body>
 
-    <div>
-
-        <a href="{% url 'home' %}">
-
-            <h3>主页</h3>
-
-        </a>
-
-    </div>
+	{% block base%}
      <hr>
 
     <h3>{{ my_good.book.full_title }}</h3>
@@ -52,7 +45,7 @@
 
 	</pre>
 
-
+	{% endblock %}
 </body>
 
 </html>

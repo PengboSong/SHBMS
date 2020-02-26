@@ -4,6 +4,7 @@
 <head>
 
     <meta charset="UTF-8">
+    {% extends 'homepage.html' %}
 
     <title>{{ book.title }}</title>
 
@@ -14,15 +15,7 @@ pre{font-size: 16px; font-family: "微软雅黑";}
 
 <body>
 
-    <div>
-
-        <a href="{% url 'home' %}">
-
-            <h3>主页</h3>
-
-        </a>
-
-    </div>
+{% block base%}
      <hr>
     <h3>{{ book.full_title }}</h3>
     <img src="{{ book.picture.url}}"  alt="" height="35%" width="18%">
@@ -65,6 +58,8 @@ pre{font-size: 16px; font-family: "微软雅黑";}
 
 
 	</pre>
+
+	{% endblock %}
 
 
 </body>
