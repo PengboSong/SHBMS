@@ -22,20 +22,23 @@
 
     {% for book in books %}
 
-        <a href="{% url 'book_detail' book.id %}">
+	<p><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></p>
 
-            <h3>{{ book.full_title }}</h3>    
+	<h3>{{ book.full_title }}</h3>
+	
+	<p>{{ book.authors }}</p>
 
-        </a>
+         <a href="{% url 'book_detail' book.id %}">查看详情</a>
+
      {% endfor %}
 
     {% else %}
-           {% for isbn in book_isbn %}
-
-                 <a href="{% url 'book_detail' book.id %}">
-
-                       <h3>{{ book.full_title }}</h3>  
-                  </a>
+           {% for isbn in books_isbn %}
+                  
+		  <p><img src="{{ isbn.picture.url}}"  alt="" height="35%" width="18%"></p>
+		  <h3>{{ isbn.full_title }}</h3>
+		  <p>{{ isbn.authors }}</p>
+                  <a href="{% url 'book_detail' isbn.id %}">查看详情</a>
  
            {% empty %} 
 

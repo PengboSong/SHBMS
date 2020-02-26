@@ -6,7 +6,9 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 
 
-# 用于将一个书籍列表按销量排序。销量来源：交易记录
+# 用于将一个书籍列表按销量取出top3
+# 销量来源：交易记录
+# 此方法避免了书籍列表为空时的报错
 def sort_book(book_list):
     all_tans = TransRecord.objects.all()
     num_list = []
@@ -52,14 +54,6 @@ def personal_center(request):
     return render(request, 'homepage.html', {})
 
 
-def site_help(request):
-    return HttpResponse('这里是帮助中心')
-
-
-def site_introduce(request):
-    return HttpResponse('这里是网页详情页')
-
-
 # 搜索界面，可以按照isbn编号或者书本标题进行搜索
 def search(request):
     book_name = request.POST.get('book_index', None)
@@ -68,7 +62,6 @@ def search(request):
         'books': Book.objects.filter(full_title=book_name),
         'books_isbn': Book.objects.filter(ISBN_num=book_isbn),
     }
-    print(book_isbn)
     return render(request, 'books_with_index.html', context)
 
 

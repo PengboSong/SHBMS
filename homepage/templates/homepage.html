@@ -37,12 +37,6 @@
           <p>帮助</p>
 
         </a>
-
-        <a href="{% url 'site_detail' %}">   
-
-          <p>网站详情</p>
-
-        </a>
 	 {% block base%}
 	
         <a href="{% url 'book' %}">   
@@ -80,7 +74,7 @@
 	
 	{% endfor %}
 
-	{% endblock %}
+	
 	<hr>
 
         <h3>索引排名内容</h3>
@@ -141,11 +135,7 @@
 		<a href="{% url 'book_detail' i.pk %}"><img src="{{ i.picture.url}}"  alt="" height="35%" width="18%"></a>
 	{% endfor %}
 	<p># 暂时列这么几个,基本一个套路</p>
-
-
-	
-
-
+	{% endblock %}
 
     {% else %}
      

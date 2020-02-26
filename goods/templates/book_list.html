@@ -8,7 +8,7 @@
 
     <meta charset="UTF-8">
 
-    <title>二手书交易平台</title>
+    <title>书籍列表（测试用）</title>
 
 </head>
 
@@ -21,13 +21,13 @@
 
     {% for book in books %}
 
-        <a href="{% url 'book_detail' book.pk %}">
+      
 
-            <h3>{{ book.full_title }}</h3>    
+        <h3>{{ book.full_title }}</h3>    
 
-        </a>
-
-        <p>{{ book.ISBN_num }}</p>
+        <p>作者：{{ book.authors }}</p>
+        <p><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></p>
+        <a href="{% url 'book_detail' book.pk %}">查看详情</a>
 
     {% empty %}
 
@@ -35,7 +35,6 @@
 
     {% endfor %}
 
-    <p>一共有{{ books|length }}本书</p>
     {% endblock %}
 
 </body>
