@@ -1,23 +1,47 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from goods.models import Book, BookType
+from center.models import TransRecord
 from django.contrib.auth.models import User
 from django.contrib import auth
+
+
+def sort_book(book_list):
+    all_tans = TransRecord.objects.all()
+    num_list = []
+    for book in book_list:
+        if book:
+            buy_num = 0
+            for tran in all_tans:
+                if tran.goods == book.full_title:
+                    buy_num = buy_num + 1
+            num_list.append((buy_num, book.pk))
+    length = len(num_list)
+    if length > 3:
+        length = 3
+    sorted(num_list)
+    show_books = []
+    for i in range(length):
+        if num_list[i]:
+            show_books.append(get_object_or_404(Book, pk=num_list[i][1]))
+        else:
+            break
+    return show_books
 
 
 def homepage(request):
     types = BookType.objects.all()
     books = Book.objects.all()
-    show_books = []
-    for i in range(3):
-        if books[i]:
-            show_books.append(books[i])
-        else:
-            break
+    show_all_books = sort_book(books)
     context = {
         'types': types,
-        'books': show_books,
+        'books': show_all_books,
     }
+    for i in range(1, 13):
+        book_type = BookType.objects.filter(pk=i)[0]
+        book_with_type = Book.objects.filter(book_type=book_type)
+        show_book_type = sort_book(book_with_type)
+        context[book_type.type_name] = show_book_type
 
     return render(request, 'homepage.html', context)
 
