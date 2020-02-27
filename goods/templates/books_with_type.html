@@ -5,35 +5,28 @@
 <head>
 
     <meta charset="UTF-8">
-
+    
+    {% extends 'homepage.html' %}
     <title>{{ book_type.type_name }}</title>
 
 </head>
 
 <body>
+    {% block base%}
 
-    <div>
-
-        <a href="{% url 'home' %}">
-
-            <h3>主页</h3>
-
-        </a>
-
-    </div>
      <h2>{{book_type.type_name}}</h2>
 
     <hr>
 
     {% for book in books %}
 
-        <a href="{% url 'book_detail' book.id %}">
+	<p><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></p>
 
-            <h3>{{ book.full_title }}</h3>    
+	<h3>{{ book.full_title }}</h3>
+	
+	<p>{{ book.authors }}</p>
 
-        </a>
-
-        <p>{{ book.ISBN_num }}</p>
+         <a href="{% url 'book_detail' book.id %}">查看详情</a>
 
     {% empty %}
 
@@ -41,7 +34,7 @@
 
     {% endfor %}
 
-    <p>一共有{{ books|length }}本书</p>
+    {% endblock %}
 
 </body>
 
