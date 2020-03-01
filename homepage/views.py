@@ -47,10 +47,7 @@ def homepage(request):
         show_book_type = sort_book(book_with_type)
         context[book_type.type_name] = show_book_type
 
-    return render(request, 'index.html', context)
-
-def explore(request):
-    return render(request, 'explore.html', {})
+    return render(request, 'homepage.html', context)
 
 # 搜索界面，可以按照isbn编号或者书本标题进行搜索
 def search(request):
