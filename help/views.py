@@ -17,6 +17,4 @@ def site_help(request):
     context = {
         'notices': notices,
     }
-    return render(request, 'help_table.html', context)
-
-# Create your views here.
+    return render(request, 'help_.html', context)
