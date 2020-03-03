@@ -1,10 +1,33 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from .models import MessageRecord, TransRecord
+from .models import MessageRecord, TransRecord, Account
 from goods.models import Goods
 from django.http import Http404
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.db.models import Q
+
+
+def personal_center(request, user_id):
+    my_goods = Goods.objects.filter(merchant=user_id)
+    trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(costumer=request.user))
+    my_3_goods = []
+    trans_3_record = []
+    length = len(my_goods)
+    if length > 3:
+        length = 3
+    for i in range(length):
+        my_3_goods.append(my_goods[i])
+    length = len(trans_records)
+    if length > 3:
+        length = 3
+    for j in range(length):
+        trans_3_record.append(trans_records[j])
+    context = {
+        'my_goods': my_3_goods,
+        'trans_records': trans_3_record
+    }
+    return render(request, 'center.html', context)
 
 
 def my_book(request, user_id):
@@ -32,7 +55,7 @@ def sell_good(request, good_id):
     }
     if request.method == "POST":
         buyer_id = request.POST.get('buyer')
-        TransRecord.objects.create(seller=request.user, goods=target_good.book.full_title, costumer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
+        TransRecord.objects.create(seller=request.user, goods=target_good.book, costumer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
         Goods.objects.filter(id=good_id).update(status=3)
 
         return HttpResponse("商品卖出成功")
@@ -43,8 +66,11 @@ def sell_good(request, good_id):
 
 
 def personal_info(request, user_id):
-
-    return HttpResponse('这里是个人信息')
+    my_account = get_object_or_404(Account,user=request.user)
+    context = {
+        'my_account': my_account
+    }
+    return render(request, 'personal_info.html', context)
 
 
 def trans_info(request, user_id):
@@ -55,13 +81,6 @@ def trans_info(request, user_id):
         'buy_records': buy_records
     }
     return render(request, 'trans_record.html', context)
-
-
-def personal_center(request, user_id):
-    if request.user.id == user_id:
-        return render(request, 'center.html', {})
-    else:
-        return HttpResponse("你没有权限访问该网页", status=404)
 
 
 def my_comment(request, user_id):
@@ -82,8 +101,9 @@ def reply(request, comment_id):
     to_id = comment.from_id
     if request.method == "POST":
         view = request.POST.get('reply')
+        pic = request.POST.get('pic')
         MessageRecord.objects.create(content=view, from_id=from_id, to_id=to_id, good_id=good,
-                                     comment_time=timezone.now)
+                                     comment_time=timezone.now, picture=pic)
         return HttpResponse('评论成功')
     else:
         return render(request, 'reply.html', {'comment':comment})

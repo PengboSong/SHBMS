@@ -11,7 +11,7 @@ class ViewAdmin(admin.ModelAdmin):
 
 
 class TransAdmin(admin.ModelAdmin):
-    list_display = ('goods', 'seller', 'costumer', 'order_time')
+    list_display = ( 'seller', 'costumer', 'order_time')
     search_fields = ('seller', 'costumer', 'goods')
     ordering = ('-order_time',)
 
