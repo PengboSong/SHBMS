@@ -2,12 +2,14 @@
 <head>
 
     <meta charset="UTF-8">
-
+    {% extends 'homepage.html' %}
     <title>卖出图书</title>
 
 </head>
 
 <body>
+
+    {% block base%}
   
     <form action="{% url 'sell_good' target_good.pk%}" method="POST" enctype="multipart/form-data">
  
@@ -37,6 +39,8 @@
 
    </form>
 
+
+    {% endblock %}
 
 </body>
 

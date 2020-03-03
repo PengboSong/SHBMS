@@ -1,9 +1,12 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from goods.models import Book, BookType
-from center.models import TransRecord
+from center.models import TransRecord, Account
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.db.models import Q
+from django.contrib.auth.hashers import make_password
+from . import forms
+
 
 
 # 用于将一个书籍列表按销量取出top3
@@ -16,7 +19,7 @@ def sort_book(book_list):
         if book:
             buy_num = 0
             for tran in all_tans:
-                if tran.goods == book.full_title:
+                if tran.goods == book:
                     buy_num = buy_num + 1
             num_list.append((buy_num, book.pk))
     length = len(num_list)
@@ -50,17 +53,11 @@ def homepage(request):
     return render(request, 'homepage.html', context)
 
 
-def personal_center(request):
-    return render(request, 'homepage.html', {})
-
-
 # 搜索界面，可以按照isbn编号或者书本标题进行搜索
 def search(request):
-    book_name = request.POST.get('book_index', None)
-    book_isbn = book_name
+    book_index = request.POST.get('book_index', None)
     context = {
-        'books': Book.objects.filter(full_title=book_name),
-        'books_isbn': Book.objects.filter(ISBN_num=book_isbn),
+        'books': Book.objects.filter(Q(full_title=book_index) | Q(ISBN_num=book_index))
     }
     return render(request, 'books_with_index.html', context)
 
@@ -74,8 +71,41 @@ def login(request):
         auth.login(request, user)
         return redirect('/')
     elif username:
-        return render(request, 'error.html', {'message': '用户名或密码不正确'})
+        return render(request, 'login.html', {'message': '用户名或密码不正确'})
     else:
-        return render(request, 'login.html')
+        return render(request, 'login.html', {})
 
 # Create your views here.
+
+
+def register(request):
+
+    if request.method == 'POST':
+        obj = forms.AccountModelForm(request.POST)
+        error = ''
+        if obj.is_valid():
+            username = obj.cleaned_data['username']
+            password = obj.cleaned_data['password']
+            re_password = obj.cleaned_data['re_password']
+            email = obj.cleaned_data['email']
+            if User.objects.filter(username=username):
+                error = '已存在的用户名'
+                return render(request, 'register.html', {'obj': obj, 'message': error})
+            else:
+                user = User.objects.create(username=username, password=make_password(password), email=email)
+            if password != re_password:
+                print(password + re_password)
+                error = '两次密码输入不一致'
+                return render(request, 'register.html', {'obj': obj, 'message': error})
+            else:
+                post = obj.save(commit=False)
+                post.status = 1
+                post.user = user
+                post.save()
+                return redirect('/')
+        else:
+            return render(request, 'register.html', context={'message': error, 'obj': obj})
+    else:
+        obj = forms.AccountModelForm()
+        return render(request, 'register.html', {'obj': obj})
+

@@ -2,19 +2,24 @@
 
     <meta charset="UTF-8">
 
+    {% extends 'homepage.html' %}
+
     <title>评论留言</title>
 
 </head>
 
 <body>
+       {% block base%}
 
 	<form method="POST" action="/center/reply/{{comment.pk}}">
 
 		 <input type="text" name="reply" />
+		
+		 <p>在此添加图片：<input type="file" name="pic"></p>
 
 		 <input type="submit" value="回复"/>
         </form>
-
+        {% endblock %}
  
 </body>
 </html>

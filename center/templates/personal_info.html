@@ -3,29 +3,27 @@
 
     <meta charset="UTF-8">
 
+    {% extends 'homepage.html' %}
+
     <title>个人信息</title>
 
 </head>
 
 <body>
 
-    <div>
-
-        <a href="{% url 'personal_center' user.pk %}">
-
-            <h3>返回</h3>
-
-        </a>
-
-    </div>
-
-
-
+    {% block base%}
+    <p>用户名：{{my_account.user.username}}</p>
+    <p>邮箱：{{my_account.user.email}}</p>
+    <p> 校区：{{my_account.school}}</p>
+    <p> 联系方式：{{my_account.phone}}</p>
+    <p> 学号：{{my_account.school_num}}</p>
+    <p> 真实姓名：{{my_account.name}}</p>
+    <p> 账号状态：{{my_account.type}}</p>
+     <button>点此修改账号信息</botton>
+   
 
 
-
-
-
+    {% endblock %}
 
 
 </body>

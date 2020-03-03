@@ -2,22 +2,14 @@
 <head>
 
     <meta charset="UTF-8">
-
+     {% extends 'homepage.html' %}
     <title>我的图书</title>
 
 </head>
 
 <body>
 
-    <div>
-
-        <a href="{% url 'personal_center' user.pk %}">
-
-            <h3>返回</h3>
-
-        </a>
-
-    </div>
+	{% block base%}
 
     <hr>
 
@@ -27,7 +19,7 @@
 
 	<p>书籍名称：
         
-        <a href="{% url 'good_detail' my_good.book.pk%}">
+        <a href="{% url 'good_detail' my_good.pk%}">
           
              {{ my_good.book.full_title }}
         </a>
@@ -54,6 +46,8 @@
 	<p>{{user.username}},您暂无书本上架</p>
 
         {% endfor %}
+
+	{% endblock %}
 
 	
 
