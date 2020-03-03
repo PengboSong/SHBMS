@@ -1,0 +1,29 @@
+{% extends 'blank.html' %}
+
+{% block title %}二手书交易平台 - 请登录{% endblock %}
+
+{% block content %}
+<body class="bg-light">
+  <div class="row justify-content-center">
+    <div class="col col-md-3">
+      <h3 class="mt-5 text-center mb-3">您好，请登录</h3>
+      <form>
+        <label for="inputUsername">用户名：</label>
+        <input class="form-control mt-1 mb-3" type="username" name="username" required autofocus>
+        <label for="inputPassword">密码：</label>
+        <input class="form-control mt-1 mb-4" type="password" name="password" required>
+        <div class="row justify-content-around">
+        <a class="btn btn-info" role="button" href="#">游客登录</a>
+        <a class="btn btn-info" role="button" href="#">没有账户？现在注册</a>
+        </div>
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+          {{ message }}
+        </div>
+        {% endif %}
+        <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">登录</button>
+      </form>
+    </div>
+  </div>
+</body>
+{% endblock %}

@@ -1,0 +1,47 @@
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>交易记录</title>
+
+<style>
+	pre{font-size: 16px; font-family: "微软雅黑";}
+</style>
+
+<body>
+
+    <div>
+
+        <a href="{% url 'personal_center' user.pk %}">
+
+            <h3>返回</h3>
+
+        </a>
+
+    </div>
+
+    <hr>
+        <h3>我的卖出记录<h3>
+
+	<pre>买家       商品名称                                交易日期                            价格</pre>
+	{% for trans_record in trans_records %}
+	
+	<pre>{{trans_record.costumer.username}}       {{trans_record.goods}}         {{trans_record.order_time}}       {{trans_record.price}}</pre>
+	
+        {% endfor %}
+
+	<hr>
+
+        <h3>我的买进记录<h3>
+
+	<pre>卖家       商品名称                                交易日期                            价格</pre>
+	{% for buy_record in buy_records %}
+	
+	<pre>{{buy_record.costumer.username}}       {{buy_record.goods}}         {{buy_record.order_time}}       {{buy_record.price}}</pre>
+
+        {% endfor %}
+
+</body>
+
+</html>

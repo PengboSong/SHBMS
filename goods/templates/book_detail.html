@@ -4,39 +4,20 @@
 <head>
 
     <meta charset="UTF-8">
+    {% extends 'homepage.html' %}
 
-    <title>{{ blog.title }}</title>
+    <title>{{ book.title }}</title>
 
 </head>
+<style>
+pre{font-size: 16px; font-family: "微软雅黑";}
+</style>
 
 <body>
 
-    <div>
-
-        <a href="{% url 'home' %}">
-
-            <h3>主页</h3>
-
-        </a>
-
-    </div>
+{% block base%}
      <hr>
-    <h3>{{ book.full_title }}</h3>
 
-    <p>作者：{{ book.authors }}</p>
-    <p>ISBN编号：{{ book.ISBN_num }}</p>
-    <p>出版商：{{ book.publisher }}</p>
-    <p>原价：{{ book.original_price }}</p>
-
-    <p>分类：
-
-        <a href="{% url 'books_with_type' book.book_type.pk %}">
-
-            {{ book.book_type }}
-
-        </a>
-
-    </p>
         <a href="{% url 'up_shelf' book.pk %}"><h3>点此上架此书</h3></a>
 
     <hr>
@@ -44,15 +25,29 @@
     <h3>此处为该书已上架信息</h3>
     
     {% for good in goods %}
-
-    <p>卖家：{{good.merchant}}           价格：{{ good.price }}</p><a href='.'>点击查看更多</a>
+	<h3>{{ good.book.full_title }}</h3>
+	<img src="{{ good.picture_1.url}}"  alt="" height="35%" width="18%">
+	{% if good.picture_2 %}
+	<img src="{{ good.picture_2.url}}"  alt="" height="35%" width="18%">
+	{% endif %}
+	<pre>卖家：{{good.merchant}}      价格：{{ good.price }}    <a href="{% url 'good_detail' good.pk %}">查看详情</a></pre>
+    
      
     {% empty %}
 
     <p>暂无卖家上架，敬请期待</p>
     
     {% endfor %}
-        
+     
+	<pre>
+
+
+
+
+
+	</pre>
+
+	{% endblock %}
 
 
 </body>

@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	{% extends 'homepage.html' %}
+
+    <meta charset="UTF-8">
+
+    <title>公告</title>
+
+</head>
+
+<body>
+
+	{% block base%}
+
+    <hr> 
+    <h2>{{notice.title}}</h2>
+    <hr>
+    <p>{{notice.content}}</p>
+    <p>发布时间：{{notice.comment_time}}</p>
+
+
+ {% endblock %}
+
+</body>
+
+</html>

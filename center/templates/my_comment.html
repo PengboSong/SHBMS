@@ -1,0 +1,52 @@
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>评论</title>
+
+</head>
+
+<body>
+
+    <div>
+
+        <a href="{% url 'personal_center' user.pk %}">
+
+            <h3>返回</h3>
+
+        </a>
+
+    </div>
+
+    <hr>
+	
+	
+	{% for my_comment in my_comments %}
+
+        <p>来源：{{my_comment.from_id.username}} id:{{my_comment.from_id.pk}}</p>
+
+	<p>评价商品：<a href="{% url 'good_detail' my_comment.good_id.pk %}">{{my_comment.good_id.book.full_title}}</a></p>
+
+	<p>评论内容：{{my_comment.content}}</p>
+	
+	<p>评论时间：{{my_comment.comment_time}}</p>
+
+	<a href=/center/reply/{{ my_comment.pk }}>点此回复</a>
+
+	{% empty %}
+
+	<p>暂无评论</p>
+	
+	<hr>
+
+	{% endfor%}
+        
+
+
+
+
+
+</body>
+
+</html>
