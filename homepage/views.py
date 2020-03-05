@@ -13,12 +13,12 @@ from . import forms
 # 销量来源：交易记录
 # 此方法避免了书籍列表为空时的报错
 def sort_book(book_list):
-    all_tans = TransRecord.objects.all()
+    all_trans_record = TransRecord.objects.all()
     num_list = []
     for book in book_list:
         if book:
             buy_num = 0
-            for tran in all_tans:
+            for tran in all_trans_record:
                 if tran.goods == book:
                     buy_num = buy_num + 1
             num_list.append((buy_num, book.pk))
@@ -38,17 +38,13 @@ def sort_book(book_list):
 # 主页：内含所有书籍销量top3和书籍按类型分类各类型top3
 def homepage(request):
     types = BookType.objects.all()
-    books = Book.objects.all()
-    show_all_books = sort_book(books)
     context = {
         'types': types,
-        'books': show_all_books,
+        'top_books': sort_book(Book.objects.all()),
     }
-    for i in range(1, 13):
-        book_type = BookType.objects.filter(pk=i)[0]
+    for book_type in types:
         book_with_type = Book.objects.filter(book_type=book_type)
-        show_book_type = sort_book(book_with_type)
-        context[book_type.type_name] = show_book_type
+        context.update({book_type.type_name: sort_book(book_with_type)})
 
     return render(request, 'homepage.html', context)
 
@@ -64,8 +60,8 @@ def search(request):
 
 # 登录界面，若用户未登录则禁止进入网页
 def login(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
     if (username is not None) and (password is not None):
         user = auth.authenticate(request, username=username, password=password)
         if user is not None:
@@ -75,6 +71,10 @@ def login(request):
             return render(request, 'login.html', {'message': '用户名或密码不正确'})
     else:
         return render(request, 'login.html', {})
+
+def logout(request):
+    auth.logout(request)
+    return homepage(request)
 
 def register(request):
 

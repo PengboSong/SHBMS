@@ -1,5 +1,7 @@
 {% extends 'homepage.html' %}
+
 {% block title %}二手书交易平台 - 个人中心{% endblock %}
+
 {% block style %}
 <style>
   .portrait-cycle {
@@ -46,32 +48,31 @@
 <main role="main" class="col-md-10 ml-sm-auto px-2">
   <div class="row">
     <div class="col-md-2">
-      <button class="btn btn-light dropdown-toggle" type="button" id="lg-portrait" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img src="{% static 'image/sample_portrait001.jpg' %}" class="portrait-cycle" width="80%">
-      </button>
-      <div class="dropdown-menu" aria-labelledby="portrait-menu">
-        <a class="dropdown-item" href="#">更改密码</a>
-        <a class="dropdown-item" href="#">退出登录</a>
-      </div>
-      <p class="text-center">用户名</p>
+      <img src="{% static 'image/sample_portrait001.jpg' %}" class="portrait-cycle" width="100%">
+      <p class="text-center">{{ my_account.user.username }}</p>
       <a class="btn btn-outline-success btn-block" role="button" href="{% url 'personal_info' user.pk %}">查看个人信息</a>
     </div>
     <div class="col">
       <h2 class="border-top mt-4 pt-2">我的图书</h2>
+      {% if my_goods %}
       <div class="row my-3">
 	      {% for my_good in my_goods %}
         <div class="card col-md-3">
-          <img src="{{ my_good.picture_1.url }}" class="card-img-top" alt="Book 1">
+          <img src="{{ my_good.picture_1.url }}" class="card-img-top" alt="">
           <div class="card-body">
             <p class="card-text">{{ my_good.book.full_title }}</p>
-            <p class="card-text">价格：{{ my_good.price }}</p>
+            <p class="card-text">价格：￥{{ my_good.price }}</p>
           </div>
         </div>
         {% endfor %}
       </div>
       <a class="btn btn-outline-primary" href="{% url 'my_book' user.pk %}">查看更多 &raquo;</a>
+      {% else %}
+      <p class="alert alert-warning text-center my-3">{{ user.username }}，您暂无书本上架</p>
+      {% endif %}
 
       <h2 class="border-top mt-4 pt-2">我的交易记录</h2>
+      {% if trans_records %}
       <table class="table text-center my-3">
         <thead class="thead-dark">
           <tr>
@@ -88,7 +89,7 @@
           <tr>
             <td><strong>1</strong></td>
             <td>
-              <img src="{{ my_good.picture_1.url }}" width="80" alt="Book 1">
+              <img src="{{ my_good.picture_1.url }}" width="80" alt="">
             </td>
             <td><strong>{{ trans_record.goods.full_title }}</strong></td>
             <td>{{ trans_record.seller.username }}</td>
@@ -100,6 +101,9 @@
         </tbody>
       </table>
       <a class="btn btn-outline-primary" href="{% url 'trans_info' user.pk %}">显示更多 &raquo;</a>
+      {% else %}
+      <p class="alert alert-warning text-center my-3">{{ user.username }}，您还没有已完成的交易</p>
+      {% endif %}
     </div>
   </div>
 </main>

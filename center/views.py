@@ -10,7 +10,7 @@ from django.db.models import Q
 
 def personal_center(request, user_id):
     my_goods = Goods.objects.filter(merchant=user_id)
-    trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(costumer=request.user))
+    trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(buyer=request.user))
     my_3_goods = []
     trans_3_record = []
     length = len(my_goods)
@@ -55,7 +55,7 @@ def sell_good(request, good_id):
     }
     if request.method == "POST":
         buyer_id = request.POST.get('buyer')
-        TransRecord.objects.create(seller=request.user, goods=target_good.book, costumer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
+        TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
         Goods.objects.filter(id=good_id).update(status=3)
 
         return HttpResponse("商品卖出成功")
@@ -66,7 +66,7 @@ def sell_good(request, good_id):
 
 
 def personal_info(request, user_id):
-    my_account = get_object_or_404(Account,user=request.user)
+    my_account = get_object_or_404(Account, user=request.user)
     context = {
         'my_account': my_account
     }
@@ -74,10 +74,10 @@ def personal_info(request, user_id):
 
 
 def trans_info(request, user_id):
-    trans_records = TransRecord.objects.filter(seller=request.user)
-    buy_records = TransRecord.objects.filter(costumer=request.user)
+    sell_records = TransRecord.objects.filter(seller=request.user)
+    buy_records = TransRecord.objects.filter(buyer=request.user)
     context = {
-        'trans_records': trans_records,
+        'sell_records': sell_records,
         'buy_records': buy_records
     }
     return render(request, 'trans_record.html', context)
