@@ -3,10 +3,10 @@ from goods.models import Book, BookType
 from center.models import TransRecord, Account
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 from . import forms
-
 
 
 # 用于将一个书籍列表按销量取出top3
@@ -75,7 +75,11 @@ def login(request):
     else:
         return render(request, 'login.html', {})
 
+
 # Create your views here.
+def logout(request):
+    auth.logout(request)
+    return HttpResponse('登出成功')
 
 
 def register(request):
@@ -108,4 +112,5 @@ def register(request):
     else:
         obj = forms.AccountModelForm()
         return render(request, 'register.html', {'obj': obj})
+
 

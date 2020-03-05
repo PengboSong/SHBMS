@@ -10,7 +10,7 @@ from django.db.models import Q
 
 def personal_center(request, user_id):
     my_goods = Goods.objects.filter(merchant=user_id)
-    trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(costumer=request.user))
+    trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(buyer=request.user))
     my_3_goods = []
     trans_3_record = []
     length = len(my_goods)
@@ -54,10 +54,9 @@ def sell_good(request, good_id):
         'buyers': buyers,
     }
     if request.method == "POST":
-        buyer_id = request.POST.get('buyer')
-        TransRecord.objects.create(seller=request.user, goods=target_good.book, costumer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
+        buyers_id = request.POST.get('buyer')
+        TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyers_id))[0], order_time=timezone.now(), price=target_good.price)
         Goods.objects.filter(id=good_id).update(status=3)
-
         return HttpResponse("商品卖出成功")
     elif target_good.status != 1:
         return HttpResponse('商品未上架，不能卖出。')
@@ -75,7 +74,7 @@ def personal_info(request, user_id):
 
 def trans_info(request, user_id):
     trans_records = TransRecord.objects.filter(seller=request.user)
-    buy_records = TransRecord.objects.filter(costumer=request.user)
+    buy_records = TransRecord.objects.filter(buyer=request.user)
     context = {
         'trans_records': trans_records,
         'buy_records': buy_records

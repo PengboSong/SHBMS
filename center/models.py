@@ -29,10 +29,10 @@ class PersonalInfo(models.Model):
 # 交易记录表
 # order_time：交易创建时间，由用户自己上传，时间自动更新
 # goods：由于此时商品已经下架，故不关联外键。直接用CharField类型记录达成交易商品名称
-# seller，costumer：外键，关联用户
+# seller，buyer：外键，关联用户
 class TransRecord(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, default='')
-    costumer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='costumer')
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='costumer')
     goods = models.ForeignKey(Book, on_delete=models.CASCADE)
     order_time = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0)

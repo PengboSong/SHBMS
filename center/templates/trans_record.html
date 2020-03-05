@@ -19,7 +19,7 @@
 	<pre>买家       商品名称                                交易日期                            价格</pre>
 	{% for trans_record in trans_records %}
 	
-	<pre>{{trans_record.costumer.username}}       {{trans_record.goods.full_title}}         {{trans_record.order_time}}       {{trans_record.price}}</pre>
+	<pre>{{trans_record.seller.username}}       {{trans_record.buyer.username}}     {{trans_record.goods.full_title}}         {{trans_record.order_time}}       {{trans_record.price}}</pre>
 	
         {% endfor %}
 
@@ -30,7 +30,7 @@
 	<pre>卖家       商品名称                                交易日期                            价格</pre>
 	{% for buy_record in buy_records %}
 	
-	<pre>{{buy_record.costumer.username}}       {{buy_record.goods.full_title}}         {{buy_record.order_time}}       {{buy_record.price}}</pre>
+	<pre>{{buy_record.seller.username}}       {{buy_record.buyer.username}}      {{buy_record.goods.full_title}}         {{buy_record.order_time}}       {{buy_record.price}}</pre>
 
         {% endfor %}
 	{% endblock %}
