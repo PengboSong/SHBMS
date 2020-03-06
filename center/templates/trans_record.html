@@ -1,47 +1,103 @@
-<html>
-<head>
+{% extends 'homepage.html' %}
 
-    <meta charset="UTF-8">
+{% block title %}二手书交易平台 - 我的交易记录{% endblock %}
 
-    <title>交易记录</title>
-
-<style>
-	pre{font-size: 16px; font-family: "微软雅黑";}
-</style>
-
-<body>
-
-    <div>
-
-        <a href="{% url 'personal_center' user.pk %}">
-
-            <h3>返回</h3>
-
+{% block sidebar %}
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_center' user.pk %}">
+          个人主页
         </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_info' user.pk %}">
+          个人信息
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'my_book' user.pk %}">
+          我的图书
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'trans_info' user.pk %}">
+          交易记录<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'my_comment' user.pk %}">
+          留言查复
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
 
-    </div>
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <h2 class="border-top mt-4 pt-2">我的卖出记录</h2>
+  {% if sell_records %}
+  <table class="table text-center my-3">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">商品编号</th>
+        <th scope="col" colspan="2">图书</th>
+        <th scope="col">买家</th>
+        <th scope="col">价格</th>
+        <th scope="col">交易时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sell_record in sell_records %}
+      <tr>
+        <td><strong>1</strong></td>
+        <td>
+          <img src="{{ my_good.picture_1.url }}" width="80" alt="">
+        </td>
+        <td><strong>{{ sell_record.goods.full_title }}</strong></td>
+        <td>{{ sell_record.buyer.username }}</td>
+        <td>{{ sell_record.price }}</td>
+        <td>{{ sell_record.order_time }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="alert alert-warning text-center my-3">{{ user.username }}，您还没有已卖出的书籍</p>
+  {% endif %}
 
-    <hr>
-        <h3>我的卖出记录<h3>
-
-	<pre>买家       商品名称                                交易日期                            价格</pre>
-	{% for trans_record in trans_records %}
-	
-	<pre>{{trans_record.costumer.username}}       {{trans_record.goods}}         {{trans_record.order_time}}       {{trans_record.price}}</pre>
-	
-        {% endfor %}
-
-	<hr>
-
-        <h3>我的买进记录<h3>
-
-	<pre>卖家       商品名称                                交易日期                            价格</pre>
-	{% for buy_record in buy_records %}
-	
-	<pre>{{buy_record.costumer.username}}       {{buy_record.goods}}         {{buy_record.order_time}}       {{buy_record.price}}</pre>
-
-        {% endfor %}
-
-</body>
-
-</html>
+  <h2 class="border-top mt-4 pt-2">我的买入记录</h2>
+  {% if buy_records %}
+  <table class="table text-center my-3">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">商品编号</th>
+        <th scope="col" colspan="2">图书</th>
+        <th scope="col">卖家</th>
+        <th scope="col">价格</th>
+        <th scope="col">交易时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for buy_record in buy_records %}
+      <tr>
+        <td><strong>1</strong></td>
+        <td>
+          <img src="{{ my_good.picture_1.url }}" width="80" alt="">
+        </td>
+        <td><strong>{{ buy_record.goods.full_title }}</strong></td>
+        <td>{{ buy_record.seller.username }}</td>
+        <td>{{ buy_record.price }}</td>
+        <td>{{ buy_record.order_time }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="alert alert-warning text-center my-3">{{ user.username }}，您还没有已购买的书籍</p>
+  {% endif %}
+</main>
+{% endblock %}

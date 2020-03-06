@@ -18,7 +18,6 @@
 	{% block base%}
 
     <hr>
-    {%if books %}
 
     {% for book in books %}
 
@@ -31,24 +30,7 @@
          <a href="{% url 'book_detail' book.id %}">查看详情</a>
 
      {% endfor %}
-
-    {% else %}
-           {% for isbn in books_isbn %}
-                  
-		  <p><img src="{{ isbn.picture.url}}"  alt="" height="35%" width="18%"></p>
-		  <h3>{{ isbn.full_title }}</h3>
-		  <p>{{ isbn.authors }}</p>
-                  <a href="{% url 'book_detail' isbn.id %}">查看详情</a>
- 
-           {% empty %} 
-
-                <p>暂无上架书籍，</p>
-
-                <a href="{% url 'create_new_book' %}"><p>点此上架</p></a>
-
-           {% endfor %}
-
-    {% endif %}
+     <p>没找到想要的书籍？<a href="{% url 'create_new_book' %}">点此上架</a></p>	
 	{% endblock %}
 
 

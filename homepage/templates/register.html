@@ -1,0 +1,71 @@
+{% extends 'blank.html' %}
+
+{% block title %}二手书交易平台 - 用户注册{% endblock %}
+
+{% block additional_script %}
+<script src="{% static 'js/form-validation.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<body class="bg-light">
+  <div class="row justify-content-center">
+    <div class="col col-md-6">
+      <h3 class="text-center mt-5 mb-3">新用户注册</h3>
+      <form class="needs-validation" action="{% url 'register' %}" method="POST" enctype="multipart/form-data" novalidate>
+        <div class="row">
+          <div class="form-group col col-md-12 mb-4">
+            <label for="inputUsername">用户名：</label>
+            <input class="form-control" type="text" id="inputUsername" name="username" required autofocus>
+            <div class="invalid-feedback">用户名不能为空</div>
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputPassword">密码：</label>
+            <input class="form-control" type="password" id="inputPassword" name="password" required>
+            <div class="invalid-feedback">密码不能为空</div>
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputPassword2">确认密码：</label>
+            <input class="form-control" type="password" id="inputPassword2" name="password2" required>
+            <div class="invalid-feedback">确认密码不能为空</div>
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputEmail">邮箱：</label>
+            <input class="form-control" type="email" id="inputEmail" name="email" required>
+            <div class="invalid-feedback">邮箱不能为空</div>
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputMobile">联系方式：</label>
+            <input class="form-control" type="tel" id="inputMobile" name="mobile" required>
+            <div class="invalid-feedback">联系方式不能为空</div>
+          </div>
+          <div class="form-group col col-md-4 mb-4">
+            <label for="inputName">真实姓名：</label>
+            <input class="form-control" type="text" id="inputName" name="name" required>
+            <div class="invalid-feedback">姓名不能为空</div>
+          </div>
+          <div class="form-group col col-md-4 mb-4">
+            <label for="inputStudentID">学号：</label>
+            <input class="form-control" type="text" id="inputStudentID" name="studentID" required>
+            <div class="invalid-feedback">学号不能为空</div>
+          </div>
+          <div class="form-group col col-md-4 mb-4">
+            <label for="inputSchool">校区：</label>
+            <select class="custom-select" id="inputSchool" name="school" required>
+              <option selected>-请选择校区-</option>
+              <option value="1">四平校区</option>
+              <option value="2">嘉定校区</option>
+            </select>
+            <div class="invalid-feedback">需要选择所在校区</div>
+          </div>
+        </div>
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+        {{ message }}
+        </div>
+        {% endif %}
+        <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">注册</button>
+      </form>
+    </div>
+  </div>
+</body>
+{% endblock %}

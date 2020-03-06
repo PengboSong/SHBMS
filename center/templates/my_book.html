@@ -1,64 +1,89 @@
-<html>
-<head>
+{% extends 'homepage.html' %}
 
-    <meta charset="UTF-8">
+{% block title %}二手书交易平台 - 我的图书{% endblock %}
 
-    <title>我的图书</title>
+{% block sidebar %}
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+	<div class="sidebar-sticky">
+		<ul class="nav flex-column">
+			<li class="nav-item">
+				<a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_center' user.pk %}">
+					个人主页
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_info' user.pk %}">
+					个人信息
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'my_book' user.pk %}">
+					我的图书<span class="sr-only">(current)</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link btn btn-outline-primary" role="button" href="{% url 'trans_info' user.pk %}">
+					交易记录
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link btn btn-outline-primary" role="button" href="{% url 'my_comment' user.pk %}">
+					留言查复
+				</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+{% endblock %}
 
-</head>
-
-<body>
-
-    <div>
-
-        <a href="{% url 'personal_center' user.pk %}">
-
-            <h3>返回</h3>
-
-        </a>
-
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <h2 class="border-top mt-4 pt-2">我的图书</h2>
+  {% if my_goods %}
+  <table class="table text-center my-3">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">商品编号</th>
+        <th scope="col" colspan="2">图书</th>
+        <th scope="col">价格</th>
+        <th scope="col">书籍状态</th>
+        <th scope="col">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for my_good in my_goods %}
+      <tr>
+        <td><strong>1</strong></td>
+        <td>
+          <img src="{{ my_good.picture_1.url }}" width="80" alt="">
+        </td>
+        <td><strong>{{ my_good.book.full_title }}</strong></td>
+        <td>{{ my_good.price }}</td>
+        <td>{{ my_good.get_status_display }}</td>
+        <td>
+          <a class="btn btn-sm btn-outline-success" role="button" href="{% url 'good_detail' my_good.book.pk %}">
+            查看详情
+          </a>
+          <a class="btn btn-sm btn-outline-success" role="button" href="{% url 'del_good' my_good.pk %}">
+            删除记录
+          </a>
+          <a class="btn btn-sm btn-outline-success" role="button" href="{% url 'sell_good' my_good.pk %}">
+            确认卖出
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="alert alert-warning text-center my-3">{{ user.username }}，您暂无书本上架</p>
+  {% endif %}
+  
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <a class="btn btn-lg btn-block btn-outline-primary" href="#">上架新书</a>
     </div>
+  </div>
 
-    <hr>
-
-	{% for my_good in my_goods %}
-
-	<img src="{{ my_good.picture_1.url}}"  alt="" height="35%" width="18%">
-
-	<p>书籍名称：
-        
-        <a href="{% url 'good_detail' my_good.book.pk%}">
-          
-             {{ my_good.book.full_title }}
-        </a>
-	</p>
-
-	<p>书籍价格：{{my_good.price}}</p>
-
-	<p>
-		书籍状态：{{my_good.get_status_display}}
-
-		<p>
-			修改书籍状态：
-			<a href="{% url 'del_good' my_good.pk %}" >删除记录</a>  
-			<a href="{% url 'sell_good' my_good.pk %}">书籍卖出</a>
-		</p>
-		
-	</p>
-
-	<hr>
-	    
-
-	{% empty %}
-	
-	<p>{{user.username}},您暂无书本上架</p>
-
-        {% endfor %}
-
-	
-
-		
-
-</body>
-
-</html>
+</main>
+{% endblock %}

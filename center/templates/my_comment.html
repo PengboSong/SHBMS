@@ -3,21 +3,16 @@
 
     <meta charset="UTF-8">
 
+    {% extends 'homepage.html' %}
+
     <title>评论</title>
 
 </head>
 
 <body>
 
-    <div>
 
-        <a href="{% url 'personal_center' user.pk %}">
-
-            <h3>返回</h3>
-
-        </a>
-
-    </div>
+    {% block base%}
 
     <hr>
 	
@@ -28,7 +23,11 @@
 
 	<p>评价商品：<a href="{% url 'good_detail' my_comment.good_id.pk %}">{{my_comment.good_id.book.full_title}}</a></p>
 
-	<p>评论内容：{{my_comment.content}}</p>
+	<p>评论内容：{{my_comment.content}}
+	        {% if my_comment.picture %}
+                      [图]
+		{% endif %}
+        </p>
 	
 	<p>评论时间：{{my_comment.comment_time}}</p>
 
@@ -42,6 +41,7 @@
 
 	{% endfor%}
         
+	{% endblock %}
 
 
 

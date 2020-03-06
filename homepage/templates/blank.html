@@ -15,7 +15,7 @@
     <script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
 
     <!-- Custom styles for this template -->
-    <!-- link rel="stylesheet" href="style.css" -->
+    {% block additional_script %}{% endblock %}
   </head>
 {% block content %}
 <body class="bg-light">
