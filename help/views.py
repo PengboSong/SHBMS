@@ -11,6 +11,13 @@ def notice(request, notice_id):
     site_notice = get_object_or_404(Notice, pk=notice_id)
     return render(request, 'notice.html', {'notice': site_notice})
 
+def guide(request):
+    articles = Article.objects.all()
+    context ={
+        'articles':articles,
+    }
+    return render(request, 'help_guide.html', context)
+
 
 def site_help(request):
     notices = Notice.objects.all()

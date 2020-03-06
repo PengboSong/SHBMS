@@ -1,30 +1,36 @@
+{% extends 'homepage.html' %}
+{% block title %}二手书交易平台 - 帮助{% endblock %}
 
-<!DOCTYPE html>
+{% block sidebar %}
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'site_help'%}">
+          公告动态<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'guide'%}">
+          购书指南
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'article' 1 %}">
+          关于我们
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
 
-<html>
-
-<head>
-	{% extends 'homepage.html' %}
-
-    <meta charset="UTF-8">
-
-    <title>公告</title>
-
-</head>
-
-<body>
-
-	{% block base%}
-
-    <hr> 
-    <h2>{{notice.title}}</h2>
-    <hr>
-    <p>{{notice.content}}</p>
-    <p>发布时间：{{notice.comment_time}}</p>
-
-
- {% endblock %}
-
-</body>
-
-</html>
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <hr> 
+  <h2>{{notice.title}}</h2>
+  <hr>
+  <p>{{notice.content}}</p>
+  <p>发布时间：{{notice.comment_time}}</p>
+</main>
+{% endblock %}
