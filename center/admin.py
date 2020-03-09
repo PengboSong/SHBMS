@@ -9,12 +9,10 @@ class ViewAdmin(admin.ModelAdmin):
     raw_id_fields = ('from_id', 'to_id', 'good_id')
     list_filter = ('to_id',)
 
-
 class TransAdmin(admin.ModelAdmin):
     list_display = ( 'seller', 'buyer', 'order_time')
     search_fields = ('seller', 'buyer', 'goods')
     ordering = ('-order_time',)
-
 
 admin.site.register(MessageRecord, ViewAdmin)
 admin.site.register(TransRecord, TransAdmin)

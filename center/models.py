@@ -24,7 +24,6 @@ class PersonalInfo(models.Model):
     mobile = models.DecimalField(max_digits=19, decimal_places=0)
     email = models.EmailField()
 
-
 # 交易记录表
 # order_time：交易创建时间，由用户自己上传，时间自动更新
 # goods：由于此时商品已经下架，故不关联外键。直接用CharField类型记录达成交易商品名称
@@ -35,7 +34,6 @@ class TransRecord(models.Model):
     goods = models.ForeignKey(Book, on_delete=models.CASCADE)
     order_time = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0)
-
 
 # 留言表
 # good_id:外键类型，关联商品表。方便用户通过留言查看对应商品内容

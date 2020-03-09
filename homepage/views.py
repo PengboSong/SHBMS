@@ -8,7 +8,6 @@ from django.contrib.auth.hashers import make_password
 from . import forms
 
 
-
 # 用于将一个书籍列表按销量取出top3
 # 销量来源：交易记录
 # 此方法避免了书籍列表为空时的报错
@@ -34,7 +33,6 @@ def sort_book(book_list):
             break
     return show_books
 
-
 # 主页：内含所有书籍销量top3和书籍按类型分类各类型top3
 def homepage(request):
     types = BookType.objects.all()
@@ -48,7 +46,6 @@ def homepage(request):
 
     return render(request, 'homepage.html', context)
 
-
 # 搜索界面，可以按照isbn编号或者书本标题进行搜索
 def search(request):
     book_index = request.POST.get('book_index', None)
@@ -56,7 +53,6 @@ def search(request):
         'books': Book.objects.filter(Q(full_title=book_index) | Q(ISBN_num=book_index))
     }
     return render(request, 'books_with_index.html', context)
-
 
 # 登录界面，若用户未登录则禁止进入网页
 def login(request):

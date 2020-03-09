@@ -29,7 +29,6 @@ def personal_center(request, user_id):
     }
     return render(request, 'center.html', context)
 
-
 def my_book(request, user_id):
     my_goods = Goods.objects.filter(merchant=user_id)
     context = {
@@ -37,11 +36,9 @@ def my_book(request, user_id):
     }
     return render(request, 'my_book.html', context)
 
-
 def del_good(request, good_id):
     Goods.objects.filter(pk=good_id)[0].delete()
     return HttpResponse('删除成功')
-
 
 def sell_good(request, good_id):
     target_good = Goods.objects.filter(id=good_id)[0]
@@ -64,14 +61,12 @@ def sell_good(request, good_id):
     else:
         return render(request, 'sell_good.html', context)
 
-
 def personal_info(request, user_id):
     my_account = get_object_or_404(Account, user=request.user)
     context = {
         'my_account': my_account
     }
     return render(request, 'personal_info.html', context)
-
 
 def trans_info(request, user_id):
     sell_records = TransRecord.objects.filter(seller=request.user)
@@ -82,7 +77,6 @@ def trans_info(request, user_id):
     }
     return render(request, 'trans_record.html', context)
 
-
 def my_comment(request, user_id):
     if request.user.id == user_id:
         my_comments = MessageRecord.objects.filter(to_id=user_id)
@@ -92,7 +86,6 @@ def my_comment(request, user_id):
         return render(request, 'my_comment.html', context)
     else:
         return HttpResponse("你没有权限访问该网页", status=404)
-
 
 def reply(request, comment_id):
     comment = get_object_or_404(MessageRecord, pk=comment_id)

@@ -6,13 +6,13 @@
   <div class="sidebar-sticky">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'site_help'%}">
-          公告动态<span class="sr-only">(current)</span>
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'site_help' %}">
+          公告动态
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'guide'%}">
-          购书指南
+        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'guide' %}">
+          购书指南<span class="sr-only">(current)</span>
         </a>
       </li>
       <li class="nav-item">
@@ -27,31 +27,13 @@
 
 {% block mainbody %}
 <main role="main" class="col-md-10 ml-sm-auto px-2">
-  <h2 class="border-top mt-4 pt-2">购书指南</h2>
-  <div class="list-group">
-    <div class="row">
-      <div class="col-8">
-        <a class="list-group-item list-group-item-action" href="{% url 'article' 2  %}">
-          如何购书
-        </a>
-      </div>
-      <div class="col-8">
-        <a class="list-group-item list-group-item-action" href="{% url 'article' 3  %}">
-          当没有搜索到想要的书籍时怎么做
-        </a>
-      </div>
-      <div class="col-8">
-        <a class="list-group-item list-group-item-action" href="{% url 'article' 4  %}">
-          如何生成交易记录
-        </a>
-      </div>
-      <div class="col-8">
-        <a class="list-group-item list-group-item-action" href="{% url 'article' 5  %}">
-          如何申诉
-        </a>
-      </div>
+  <h2 class="border-bottom mt-4 pb-3">购书指南</h2>
+  <div class="list-group mx-4 mt-3 mb-5">
+    {% for article in articles %}
+    <a class="list-group-item list-group-item-action" href="{% url 'article' article.pk %}">{{ article.title }}</a>
+    {% empty %}
+    <p class="alert alert-warning text-center my-3">暂无文章</p>
+    {% endfor %}
   </div>
-
 </main>
-{% endblock %}
-   
+{% endblock %}   
