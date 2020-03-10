@@ -2,6 +2,16 @@
 
 {% block title %}二手书交易平台 - 我的图书{% endblock %}
 
+{% block additional_script %}
+{% if messages %}
+<script>
+{% for msg in messages %}
+  alert('{{ msg.message }}');
+{% endfor %}
+</script>
+{% endif %}
+{% endblock %}
+
 {% block sidebar %}
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
 	<div class="sidebar-sticky">

@@ -1,47 +1,21 @@
-<html>
-<head>
+{% extends 'blank.html' %}
 
-    <meta charset="UTF-8">
-    {% extends 'homepage.html' %}
-    <title>卖出图书</title>
+{% block title %}二手书交易平台 - 卖出图书{% endblock %}
 
-</head>
-
+{% block content %}
 <body>
-
-    {% block base%}
-  
-    <form action="{% url 'sell_good' target_good.pk%}" method="POST" enctype="multipart/form-data">
- 
-	<p>商品名称: {{ target_good.book.full_title }}</p>
-
-	<p>买家:
-
-		{% for buyer in buyers %}
-		
-
-		<select name="buyer">
-
-			<option value={{ buyer.pk}}>{{ buyer.username }}</option>
-
-		</select>
-
-		{% empty %}
-
-  		<p>暂无用户想要购买此书，敬请期待。</p>
-		
-		{% endfor %}
-	</p>
-		
-	 	<input type="submit" value="确定"/>
-
-
-
-   </form>
-
-
-    {% endblock %}
-
+  <form action="{% url 'sell_good' target_good.pk%}" method="POST" enctype="multipart/form-data">
+    <p>商品名称: {{ target_good.book.full_title }}</p>
+    <p>买家:
+      {% for buyer in buyers %}
+      <select name="buyer">
+        <option value={{ buyer.pk}}>{{ buyer.username }}</option>
+      </select>
+      {% empty %}
+      <p>暂无用户想要购买此书，敬请期待。</p>
+      {% endfor %}
+    </p>
+    <input type="submit" value="确定" />
+  </form>
 </body>
-
-</html>
+{% endblock %}

@@ -13,7 +13,8 @@
     <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
-
+    {% block additional_script %}{% endblock %}
+    
     <!-- Custom styles for this template -->
     <!-- link rel="stylesheet" href="index.css" -->
     {% block style %}

@@ -13,9 +13,12 @@
     <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
+    {% block additional_script %}{% endblock %}
 
     <!-- Custom styles for this template -->
-    {% block additional_script %}{% endblock %}
+    {% block style %}
+    <style></style>
+    {% endblock %}
   </head>
 {% block content %}
 <body class="bg-light">

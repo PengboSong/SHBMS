@@ -1,52 +1,96 @@
-<html>
-<head>
+{% extends 'homepage.html' %}
 
-    <meta charset="UTF-8">
+{% block title %}二手书交易平台 - 留言查复{% endblock %}
 
-    {% extends 'homepage.html' %}
+{% block style %}
+<style>
+  .portrait-cycle {
+    border-radius: 100%;
+  }
+</style>
+{% endblock %}
 
-    <title>评论</title>
+{% block sidebar %}
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_center' user.pk %}">
+          个人主页
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_info' user.pk %}">
+          个人信息
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'my_book' user.pk %}">
+          我的图书
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'trans_info' user.pk %}">
+          交易记录
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'my_comment' user.pk %}">
+          留言查复<span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
 
-</head>
-
-<body>
-
-
-    {% block base%}
-
-    <hr>
-	
-	
-	{% for my_comment in my_comments %}
-
-        <p>来源：{{my_comment.from_id.username}} id:{{my_comment.from_id.pk}}</p>
-
-	<p>评价商品：<a href="{% url 'good_detail' my_comment.good_id.pk %}">{{my_comment.good_id.book.full_title}}</a></p>
-
-	<p>评论内容：{{my_comment.content}}
-	        {% if my_comment.picture %}
-                      [图]
-		{% endif %}
-        </p>
-	
-	<p>评论时间：{{my_comment.comment_time}}</p>
-
-	<a href=/center/reply/{{ my_comment.pk }}>点此回复</a>
-
-	{% empty %}
-
-	<p>暂无评论</p>
-	
-	<hr>
-
-	{% endfor%}
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <h2 class="border-top mt-4 pt-2">相关评论</h2>
+  {% if my_comments %}
+  <ul class="list-unstyled my-3">
+    {% for my_comment in my_comments %}
+    <li class="media border px-4 py-3">        
+      <img src="{% static 'image/sample_portrait001.jpg' %}" class="portrait-cycle mr-3" height="80" width="80" alt="">
+      <div class="media-body">
+        <h5>{{ my_comment.from_id.pk }}@{{ my_comment.from_id.username }}</h5>
+        <p class="border-bottom pb-3">评论时间：{{ my_comment.comment_time }}</p>
+        <p>{{ my_comment.content }}</p>
         
-	{% endblock %}
-
-
-
-
-
-</body>
-
-</html>
+        <div class="btn-group" role="group">
+          {% if my_comment.picture %}
+          <button class="btn btn-sm btn-outline-success" type="button" data-toggle="collapse" data-target="#comment_pic_{{ my_comment.pk }}" aria-expanded="false" aria-controls="comment_pic_{{ my_comment.pk }}">
+            展开评论图片
+          </button>
+          {% endif %}
+          <button class="btn btn-sm btn-outline-success" type="button" data-toggle="collapse" data-target="#comment_good_{{ my_comment.pk }}" aria-expanded="false" aria-controls="comment_good_{{ my_comment.pk }}">
+            查看评价商品
+          </button>
+          <a class="btn btn-sm btn-outline-success" role="button" href="{% url 'reply' my_comment.pk %}">
+            点此回复
+          </a>
+        </div>
+        {% if my_comment.picture %}
+        <div class="collapse my-2 w-50" id="comment_pic_{{ my_comment.pk }}">
+          <div class="card card-body">
+            <img src="#" width="120" alt="">
+          </div>
+        </div>
+        {% endif %}
+        <div class="collapse my-2 w-50" id="comment_good_{{ my_comment.pk }}">
+          <div class="card card-body">
+            <p>{{ my_comment.good_id.book.full_title }}</p>
+            <a class="btn btn-block btn-outline-success" role="button" href="{% url 'good_detail' my_comment.good_id.pk %}">
+              查看详情
+            </a>
+          </div>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="alert alert-warning text-center my-3">{{ user.username }}，您暂无收到的评论</p>
+  {% endif %}
+</main>
+{% endblock %}

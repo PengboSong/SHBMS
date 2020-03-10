@@ -4,6 +4,7 @@ from .models import MessageRecord, TransRecord, Account
 from goods.models import Goods
 from django.http import Http404
 from django.utils import timezone
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q
 
@@ -38,7 +39,7 @@ def my_book(request, user_id):
 
 def del_good(request, good_id):
     Goods.objects.filter(pk=good_id)[0].delete()
-    return HttpResponse('删除成功')
+    messages.success("商品删除成功")
 
 def sell_good(request, good_id):
     target_good = Goods.objects.filter(id=good_id)[0]
@@ -54,10 +55,9 @@ def sell_good(request, good_id):
         buyer_id = request.POST.get('buyer')
         TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
         Goods.objects.filter(id=good_id).update(status=3)
-
-        return HttpResponse("商品卖出成功")
+        messages.success("商品卖出成功")
     elif target_good.status != 1:
-        return HttpResponse('商品未上架，不能卖出。')
+        messages.success('商品未上架，不能卖出')
     else:
         return render(request, 'sell_good.html', context)
 
@@ -97,6 +97,6 @@ def reply(request, comment_id):
         pic = request.POST.get('pic')
         MessageRecord.objects.create(content=view, from_id=from_id, to_id=to_id, good_id=good,
                                      comment_time=timezone.now, picture=pic)
-        return HttpResponse('评论成功')
+        messages.success('评论成功')
     else:
         return render(request, 'reply.html', {'comment':comment})

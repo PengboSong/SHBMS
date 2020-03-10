@@ -1,25 +1,23 @@
-<head>
+{% extends 'blank.html' %}
 
-    <meta charset="UTF-8">
+{% block title %}二手书交易平台 - 评论留言{% endblock %}
 
-    {% extends 'homepage.html' %}
+{% block additional_script %}
+{% if messages %}
+<script>
+{% for msg in messages %}
+  alert('{{ msg.message }}');
+{% endfor %}
+</script>
+{% endif %}
+{% endblock %}
 
-    <title>评论留言</title>
-
-</head>
-
+{% block content %}
 <body>
-       {% block base%}
-
-	<form method="POST" action="/center/reply/{{comment.pk}}">
-
-		 <input type="text" name="reply" />
-		
-		 <p>在此添加图片：<input type="file" name="pic"></p>
-
-		 <input type="submit" value="回复"/>
-        </form>
-        {% endblock %}
- 
+  <form method="POST" action="/center/reply/{{comment.pk}}">
+    <input type="text" name="reply" />
+    <p>在此添加图片：<input type="file" name="pic"></p>
+    <input type="submit" value="回复" />
+  </form>
 </body>
-</html>
+{% endblock %}
