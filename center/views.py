@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import MessageRecord, TransRecord, Account
 from goods.models import Goods
@@ -7,46 +7,93 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.urls import reverse_lazy
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import DeleteView
 
 
-def personal_center(request, user_id):
-    my_goods = Goods.objects.filter(merchant=user_id)
-    trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(buyer=request.user))
-    my_3_goods = []
-    trans_3_record = []
-    length = len(my_goods)
-    if length > 3:
-        length = 3
-    for i in range(length):
-        my_3_goods.append(my_goods[i])
-    length = len(trans_records)
-    if length > 3:
-        length = 3
-    for j in range(length):
-        trans_3_record.append(trans_records[j])
-    context = {
-        'my_goods': my_3_goods,
-        'trans_records': trans_3_record
-    }
-    return render(request, 'center.html', context)
+class PersonalCenterView(TemplateView):
+    template_name = "center.html"
 
-def my_book(request, user_id):
-    my_goods = Goods.objects.filter(merchant=user_id)
-    context = {
-        'my_goods': my_goods
-    }
-    return render(request, 'my_book.html', context)
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = context['user_id']
+        if request.user.id == user_id:
+            context['my_goods'] = Goods.objects.filter(merchant=user_id)[:3]
+            context['trans_records'] = TransRecord.objects.filter(Q(seller=request.user) | Q(buyer=request.user))[:3]
+            return self.render_to_response(context)
+        else:
+            return redirect('/')
 
-def del_good(request, good_id):
-    Goods.objects.filter(pk=good_id)[0].delete()
-    messages.success("商品删除成功")
+class PersonalInfoView(TemplateView):
+    template_name = "personal_info.html"
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = context['user_id']
+        if request.user.id == user_id:
+            my_account = get_object_or_404(Account, user=request.user)
+            context['my_account'] = my_account
+            return self.render_to_response(context)
+        else:
+            return redirect('/')
+
+class MyBookView(TemplateView):
+    template_name = "my_book.html"
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = context['user_id']
+        if request.user.id == user_id:
+            context['my_goods'] = Goods.objects.filter(merchant=user_id)
+            return self.render_to_response(context)
+        else:
+            return redirect('/')
+
+    def get_context_data(**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['my_goods'] = Goods.objects.filter(merchant=user_id)
+        return context
+
+    def del_good(self, request, pk):
+        good_object = Goods.objects.filter(pk=pk)[0]
+        # good_object.delete()
+        messages.success(self.request, "商品删除成功")
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+class TransactionRecordView(TemplateView):
+    template_name = "trans_record.html"
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = context['user_id']
+        if request.user.id == user_id:
+            context['sell_records'] = TransRecord.objects.filter(seller=request.user)
+            context['buy_record'] = TransRecord.objects.filter(buyer=request.user)
+            return self.render_to_response(context)
+        else:
+            return redirect('/')
+
+class MyCommentView(TemplateView):
+    template_name = "trans_record.html"
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if request.user.id == context['user_id']:
+            context['my_comments'] = MessageRecord.objects.filter(to_id=context['user_id'])
+            return self.render_to_response(context)
+        else:
+            return redirect('/')
+
+class DeleteGoodView(DeleteView):
+    model = Goods
+    success_url = reverse_lazy('my_book')
 
 def sell_good(request, good_id):
     target_good = Goods.objects.filter(id=good_id)[0]
     comments = MessageRecord.objects.filter(good_id=good_id)
-    buyers = []
-    for i in comments:
-        buyers.append(i.from_id)
+    buyers = [comment.from_id for comment in comments]
     context = {
         'target_good': target_good,
         'buyers': buyers,
@@ -55,37 +102,13 @@ def sell_good(request, good_id):
         buyer_id = request.POST.get('buyer')
         TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
         Goods.objects.filter(id=good_id).update(status=3)
-        messages.success("商品卖出成功")
+        messages.success(request, "商品卖出成功")
+        return render(request, 'info.html')
     elif target_good.status != 1:
-        messages.success('商品未上架，不能卖出')
+        messages.warning(request, '商品未上架，不能卖出')
+        return render(request, 'my_book.html', context)
     else:
         return render(request, 'sell_good.html', context)
-
-def personal_info(request, user_id):
-    my_account = get_object_or_404(Account, user=request.user)
-    context = {
-        'my_account': my_account
-    }
-    return render(request, 'personal_info.html', context)
-
-def trans_info(request, user_id):
-    sell_records = TransRecord.objects.filter(seller=request.user)
-    buy_records = TransRecord.objects.filter(buyer=request.user)
-    context = {
-        'sell_records': sell_records,
-        'buy_records': buy_records
-    }
-    return render(request, 'trans_record.html', context)
-
-def my_comment(request, user_id):
-    if request.user.id == user_id:
-        my_comments = MessageRecord.objects.filter(to_id=user_id)
-        context = {
-            'my_comments': my_comments,
-        }
-        return render(request, 'my_comment.html', context)
-    else:
-        return HttpResponse("你没有权限访问该网页", status=404)
 
 def reply(request, comment_id):
     comment = get_object_or_404(MessageRecord, pk=comment_id)
@@ -97,6 +120,7 @@ def reply(request, comment_id):
         pic = request.POST.get('pic')
         MessageRecord.objects.create(content=view, from_id=from_id, to_id=to_id, good_id=good,
                                      comment_time=timezone.now, picture=pic)
-        messages.success('评论成功')
+        messages.success(request, '评论成功')
+        return render(request, 'info.html')
     else:
         return render(request, 'reply.html', {'comment':comment})
