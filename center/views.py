@@ -6,16 +6,7 @@ from django.http import Http404
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
-
-
-def judge(request, user_id):
-    user = get_object_or_404(Account, user=request.user)
-    if user.status == 2:
-        return '您在封禁中，不能执行该操作'
-    if request.user.pk != user_id:
-        return '您无权限访问该网页'
-    else:
-        return ''
+from . import form
 
 
 def personal_center(request, user_id):
@@ -55,35 +46,35 @@ def my_book(request, user_id):
 
 
 def del_good(request, good_id):
-    Goods.objects.filter(pk=good_id)[0].delete()
-    if judge(request, user_id) == '':
+    if get_object_or_404(Account, user=request.user).status == 1:
+        Goods.objects.filter(pk=good_id)[0].delete()
         return HttpResponse('删除成功')
     else:
-        return HttpResponse(judge(request, user_id))
+        return HttpResponse('您无权限进行该操作')
 
 
 def sell_good(request, good_id):
-    target_good = Goods.objects.filter(id=good_id)[0]
-    comments = MessageRecord.objects.filter(good_id=good_id)
-    buyers = []
-    for i in comments:
-        buyers.append(i.from_id)
-    context = {
-        'target_good': target_good,
-        'buyers': buyers,
-    }
-    if request.method == "POST":
-        buyers_id = request.POST.get('buyer')
-        TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyers_id))[0], order_time=timezone.now(), price=target_good.price)
-        Goods.objects.filter(id=good_id).update(status=3)
-        return HttpResponse("商品卖出成功")
-    elif target_good.status != 1:
-        return HttpResponse('商品未上架，不能卖出。')
-    else:
-        if judge(request, user_id) == '':
-            return render(request, 'sell_good.html', context)
+    if get_object_or_404(Account, user=request.user).status == 1:
+        target_good = Goods.objects.filter(id=good_id)[0]
+        comments = MessageRecord.objects.filter(good_id=good_id)
+        buyers = []
+        for i in comments:
+            buyers.append(i.from_id)
+        context = {
+            'target_good': target_good,
+            'buyers': buyers,
+        }
+        if request.method == "POST":
+            buyers_id = request.POST.get('buyer')
+            TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyers_id))[0], order_time=timezone.now(), price=target_good.price)
+            Goods.objects.filter(id=good_id).update(status=3)
+            return HttpResponse("商品卖出成功")
+        elif target_good.status != 1:
+            return HttpResponse('商品未上架，不能卖出。')
         else:
-            return HttpResponse(judge(request, user_id))
+            return render(request, 'sell_good.html', context)
+    else:
+        return HttpResponse('您无权限进行该操作')
 
 
 def personal_info(request, user_id):
@@ -97,6 +88,24 @@ def personal_info(request, user_id):
         return HttpResponse('您无权限访问该网页')
 
 
+def update_info(request, user_id):
+    my_account = get_object_or_404(Account, user=request.user)
+    if request.user.pk == user_id:
+        if request.method == "POST":
+            obj = form.UpdateInfoForm(request.POST)
+            if obj.is_valid():
+                User.objects.filter(pk=user_id).update(email=obj.cleaned_data['email'])
+                Account.objects.filter(user=request.user).update(phone=obj.cleaned_data['phone'],
+                                                                school=obj.cleaned_data['school'])
+
+                return HttpResponse('修改成功')
+        else:
+            obj = form.UpdateInfoForm(request.POST)
+            return render(request, 'update_info.html',{'my_account': my_account, 'obj': obj})
+    else:
+        return HttpResponse('您无权限访问该网页')
+
+
 def trans_info(request, user_id):
     trans_records = TransRecord.objects.filter(seller=request.user)
     buy_records = TransRecord.objects.filter(buyer=request.user)
@@ -105,7 +114,7 @@ def trans_info(request, user_id):
         'buy_records': buy_records
     }
     if request.user.pk == user_id:
-        return render(request, 'trans_info.html', context)
+        return render(request, 'trans_record.html', context)
     else:
         return HttpResponse('您无权限访问该网页')
 

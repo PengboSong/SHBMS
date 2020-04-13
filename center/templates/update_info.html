@@ -1,0 +1,29 @@
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>个人信息更新</title>
+    {% extends 'homepage.html' %}
+
+</head>
+
+<body>
+   	{% block base%}
+	 <p>用户名：{{my_account.user.username}}</p>
+	<p> 学号：{{my_account.school_num}}</p>
+    	<p> 真实姓名：{{my_account.name}}</p>
+
+	<form method="POST" action="/center/update_info/{{user.pk}}">
+	<table>
+		<p>学校：{{obj.school}}</p>
+		<p>电话：{{obj.phone}}</p>
+		<p>邮箱：{{obj.email}}</p>
+	</table>
+	    	<p> 账号状态：{{my_account.get_status_display}}</p>
+    		<p>信用分：{{my_account.credit}}</p>
+		 <input type="submit" value="完成"/>
+        </form>
+	{% endblock %}
+
+ 
+</body>

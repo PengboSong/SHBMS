@@ -20,9 +20,8 @@
     <p> 真实姓名：{{my_account.name}}</p>
     <p> 账号状态：{{my_account.get_status_display}}</p>
     <p>信用分：{{my_account.credit}}</p>
-     <button>修改信息</botton>
+     <a href="{% url 'update_info' user.pk%}">修改信息</a>
    
-
 
     {% endblock %}
 

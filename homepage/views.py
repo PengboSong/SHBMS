@@ -83,7 +83,6 @@ def logout(request):
 
 
 def register(request):
-
     if request.method == 'POST':
         obj = forms.AccountModelForm(request.POST)
         error = ''
