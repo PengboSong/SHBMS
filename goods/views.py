@@ -3,12 +3,20 @@ from django.http import HttpResponse
 from .models import Book, Goods, BookType
 from . import form
 from django.utils import timezone
-from center.models import MessageRecord
+from center.models import MessageRecord, TransRecord, Account
 from django.contrib.auth.models import User
 
 
+def judge(request):
+    current_user = get_object_or_404(Account, user=request.user)
+    if current_user.status == 1:
+        return True
+    else:
+        return False
+
+
 def book_list(request):
-    books = Book.objects.all()
+    books = Book.objects.filter(book_status=1)
     context = {
         'books': books
     }
@@ -41,12 +49,15 @@ def create_new_book(request):
             post = obj.save(commit=False)
             post.picture = file_obj
             post.save()
-            return HttpResponse("数据提交成功！！")
+            return HttpResponse("数据提交成功,正在等待审核，审核通过后即可上架")
         else:
             return render(request, "create_new_book.html", {'obj': obj})
     else:
-        obj = form.BookModelForm()
-        return render(request, "create_new_book.html", {'obj': obj})
+        if judge(request):
+            obj = form.BookModelForm()
+            return render(request, "create_new_book.html", {'obj': obj})
+        else:
+            return HttpResponse('您无权限进行此操作')
 
 
 def up_shelf(request, book_id):
@@ -67,13 +78,19 @@ def up_shelf(request, book_id):
         else:
             return render(request, "up_shelf.html", {'obj2': obj2, 'book': book[0]})
     else:
-        obj2 = form.GoodsModelForm()
-        return render(request, "up_shelf.html", {'obj2': obj2, 'book': book[0]})
+        if judge(request):
+            obj2 = form.GoodsModelForm()
+            return render(request, "up_shelf.html", {'obj2': obj2, 'book': book[0]})
+        else:
+            return HttpResponse('您无权限进行此操作')
 
 
 def good_detail(request, good_id):
-    good = get_object_or_404(Goods, pk=good_id)
-    return render(request, "good_detail.html", {'good': good})
+    good = Goods.objects.filter(Q(pk=good_id)|Q())
+    sell_book = TransRecord.objects.filter(seller=request.user)
+    sell_num = len(sell_book)
+    credit_point = get_object_or_404(Account, user=request.user).credit
+    return render(request, "good_detail.html", {'good': good, 'sell_num': sell_num, 'credit_point':credit_point })
 
 
 def comment(request, good_id):
@@ -86,7 +103,10 @@ def comment(request, good_id):
         MessageRecord.objects.create(content=view, from_id=request.user,                                      to_id=good.merchant, good_id=good, comment_time=timezone.now)
         return HttpResponse('评论成功')
     else:
-        return render(request, 'comment.html', context)
+        if judge(request):
+            return render(request, 'comment.html', context)
+        else:
+            return HttpResponse('您无权限进行此操作')
 
 
 # Create your views here.

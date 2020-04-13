@@ -8,6 +8,16 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 
 
+def judge(request, user_id):
+    user = get_object_or_404(Account, user=request.user)
+    if user.status == 2:
+        return '您在封禁中，不能执行该操作'
+    if request.user.pk != user_id:
+        return '您无权限访问该网页'
+    else:
+        return ''
+
+
 def personal_center(request, user_id):
     my_goods = Goods.objects.filter(merchant=user_id)
     trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(buyer=request.user))
@@ -27,7 +37,10 @@ def personal_center(request, user_id):
         'my_goods': my_3_goods,
         'trans_records': trans_3_record
     }
-    return render(request, 'center.html', context)
+    if request.user.pk == user_id:
+        return render(request, 'center.html', context)
+    else:
+        return HttpResponse('您无权限访问该网页')
 
 
 def my_book(request, user_id):
@@ -35,12 +48,18 @@ def my_book(request, user_id):
     context = {
         'my_goods': my_goods
     }
-    return render(request, 'my_book.html', context)
+    if request.user.pk == user_id:
+        return render(request, 'my_book.html', context)
+    else:
+        return HttpResponse('您无权限访问该网页')
 
 
 def del_good(request, good_id):
     Goods.objects.filter(pk=good_id)[0].delete()
-    return HttpResponse('删除成功')
+    if judge(request, user_id) == '':
+        return HttpResponse('删除成功')
+    else:
+        return HttpResponse(judge(request, user_id))
 
 
 def sell_good(request, good_id):
@@ -61,7 +80,10 @@ def sell_good(request, good_id):
     elif target_good.status != 1:
         return HttpResponse('商品未上架，不能卖出。')
     else:
-        return render(request, 'sell_good.html', context)
+        if judge(request, user_id) == '':
+            return render(request, 'sell_good.html', context)
+        else:
+            return HttpResponse(judge(request, user_id))
 
 
 def personal_info(request, user_id):
@@ -69,7 +91,10 @@ def personal_info(request, user_id):
     context = {
         'my_account': my_account
     }
-    return render(request, 'personal_info.html', context)
+    if request.user.pk == user_id:
+        return render(request, 'personal_info.html', context)
+    else:
+        return HttpResponse('您无权限访问该网页')
 
 
 def trans_info(request, user_id):
@@ -79,7 +104,10 @@ def trans_info(request, user_id):
         'trans_records': trans_records,
         'buy_records': buy_records
     }
-    return render(request, 'trans_record.html', context)
+    if request.user.pk == user_id:
+        return render(request, 'trans_info.html', context)
+    else:
+        return HttpResponse('您无权限访问该网页')
 
 
 def my_comment(request, user_id):

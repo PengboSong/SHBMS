@@ -38,7 +38,7 @@ def sort_book(book_list):
 # 主页：内含所有书籍销量top3和书籍按类型分类各类型top3
 def homepage(request):
     types = BookType.objects.all()
-    books = Book.objects.all()
+    books = Book.objects.filter(book_status=1)
     show_all_books = sort_book(books)
     context = {
         'types': types,
@@ -57,7 +57,7 @@ def homepage(request):
 def search(request):
     book_index = request.POST.get('book_index', None)
     context = {
-        'books': Book.objects.filter(Q(full_title=book_index) | Q(ISBN_num=book_index))
+        'books': Book.objects.filter(Q(full_title=book_index) | Q(ISBN_num=book_index) & Q(book_status=1))
     }
     return render(request, 'books_with_index.html', context)
 
