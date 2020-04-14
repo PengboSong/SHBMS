@@ -61,5 +61,5 @@ class Goods(models.Model):
 def file_delete(instance, **kwargs):
     instance.picture_1.delete(True)
     instance.picture_2.delete(True)
-    
+
 # Create your models here.

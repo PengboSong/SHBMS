@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import MessageRecord, TransRecord, Account
-from goods.models import Goods
+from goods.models import Goods, Book
 from django.http import Http404
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -57,6 +57,8 @@ def del_good(request, good_id):
 def sell_good(request, good_id):
     if get_object_or_404(Account, user=request.user).status == 1:
         target_good = Goods.objects.filter(id=good_id)[0]
+        cur_volume = Book.objects.get(id=target_good.book.pk).sale_volume+1
+        cur_credit = Account.objects.get(user=request.user).credit+5
         comments = MessageRecord.objects.filter(good_id=good_id)
         buyers = []
         for i in comments:
@@ -68,8 +70,9 @@ def sell_good(request, good_id):
         if request.method == "POST":
             buyers_id = request.POST.get('buyer')
             TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyers_id))[0], order_time=timezone.now(), price=target_good.price)
-            Goods.objects.filter(id=good_id).update(status=3, sale_volume=+1)
-            Account.objects.filter(user=request.user).update(credits=+5)
+            Book.objects.filter(id=target_good.book.pk).update(sale_volume=cur_volume)
+            Goods.objects.filter(pk=good_id).update(status=3)
+            Account.objects.filter(user=request.user).update(credit=cur_credit)
             return HttpResponse("商品卖出成功")
         elif target_good.status != 1:
             return HttpResponse('商品未上架，不能卖出。')
