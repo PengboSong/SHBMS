@@ -71,6 +71,7 @@
         <a href="{% url 'book_detail' book.pk %}"><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></a>
         <p>作者：{{book.authors}}</p>
         <p>标题：{{book.full_title}}</p>
+	<p>销量：{{book.sale_volume}}</p>
         <p>排名：{{ forloop.counter }}</p>
 	
 	{% endfor %}

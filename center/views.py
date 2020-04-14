@@ -48,6 +48,7 @@ def my_book(request, user_id):
 def del_good(request, good_id):
     if get_object_or_404(Account, user=request.user).status == 1:
         Goods.objects.filter(pk=good_id)[0].delete()
+
         return HttpResponse('删除成功')
     else:
         return HttpResponse('您无权限进行该操作')
@@ -67,7 +68,8 @@ def sell_good(request, good_id):
         if request.method == "POST":
             buyers_id = request.POST.get('buyer')
             TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyers_id))[0], order_time=timezone.now(), price=target_good.price)
-            Goods.objects.filter(id=good_id).update(status=3)
+            Goods.objects.filter(id=good_id).update(status=3, sale_volume=+1)
+            Account.objects.filter(user=request.user).update(credits=+5)
             return HttpResponse("商品卖出成功")
         elif target_good.status != 1:
             return HttpResponse('商品未上架，不能卖出。')

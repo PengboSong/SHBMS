@@ -13,25 +13,16 @@ from . import forms
 # 销量来源：交易记录
 # 此方法避免了书籍列表为空时的报错
 def sort_book(book_list):
-    all_tans = TransRecord.objects.all()
-    num_list = []
-    for book in book_list:
-        if book:
-            buy_num = 0
-            for tran in all_tans:
-                if tran.goods == book:
-                    buy_num = buy_num + 1
-            num_list.append((buy_num, book.pk))
-    length = len(num_list)
-    if length > 3:
-        length = 3
-    sorted(num_list)
+    sale_num = []
     show_books = []
-    for i in range(length):
-        if num_list[i]:
-            show_books.append(get_object_or_404(Book, pk=num_list[i][1]))
-        else:
-            break
+    for book in book_list:
+        sale_num.append((book.sale_volume, book.pk))
+    sorted(sale_num)
+    i = 0
+    for show_book in sale_num:
+        if show_book and i < 3:
+            show_books.append(get_object_or_404(Book, pk=show_book[1]))
+            i = i+1
     return show_books
 
 

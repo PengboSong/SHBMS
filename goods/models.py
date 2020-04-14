@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 
 # 自定义数据（char）
@@ -36,6 +38,7 @@ class Book(models.Model):
     authors = models.CharField(max_length=255)
     picture = models.ImageField(upload_to='books_images')
     original_price = models.DecimalField(max_digits=19, decimal_places=2)
+    sale_volume = models.IntegerField(default=0)
 
 
 # 商品表
@@ -54,4 +57,9 @@ class Goods(models.Model):
     status = models.IntegerField(choices=type)
 
 
+@receiver(pre_delete, sender=Goods)
+def file_delete(instance, **kwargs):
+    instance.picture_1.delete(True)
+    instance.picture_2.delete(True)
+    
 # Create your models here.
