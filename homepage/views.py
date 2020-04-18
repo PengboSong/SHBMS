@@ -35,7 +35,7 @@ def homepage(request):
     context = {
         'types': types,
     }
-    for i in range(1, 13):
+    for  i in range(1, 13):
         book_type = BookType.objects.filter(pk=i)[0]
         book_with_type = Book.objects.filter(Q(book_type=book_type) & Q(book_status=1))
         show_book_type = sort_book(book_with_type)
