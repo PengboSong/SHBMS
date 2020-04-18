@@ -1,42 +1,90 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="">
+{% load static %}
 <head>
-
     <meta charset="UTF-8">
-    
-    <title>用户注册</title>
-
-</head>
-
-<body>
-
-   <h3>用户注册</h3>
-    <hr>
-
-    <form action="/register/" method="POST" enctype="multipart/form-data">
-
-      <table>
-		
-	<p>用户名：{{ obj.username }}</p>
-	<p>密码：{{ obj.password }}</p>
-	<p>再次输入密码：{{ obj.re_password }}</p>
-	<p>邮箱：{{ obj.email }}</p>
-	<p>校区：{{ obj.school }}</p>
-	<p>学号：{{ obj.school_num }}</p>
-	<p>真实姓名：{{ obj.name }}</p>
-	<p>联系方式：{{ obj.phone }}</p>
-        
-    </table>
-
-    <p>{{ message }}</p>
-
-    <input type="submit" value="提交"> 
-
-    </form>
-
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二手书交易平台</title> 
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{% static 'bootstrap/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  </head>
+<body class="bg-light" style="line-height: 20px;font-size: 15px;">
+  <div class="row justify-content-center">
+    <div class="col col-md-6" >
+      <h3 class="text-center mt-5 mb-3">新用户注册</h3>
+      <form class="needs-validation" action="{% url 'register' %}" method="POST" enctype="multipart/form-data" novalidate>
+        <div class="row">
+          <div class="form-group col col-md-8 mb-4">
+            <label for="inputUsername">用户名：{{ obj.username }}</label>
+            {% if  obj.errors.username.0  %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.username.0 }}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group col col-md-8 mb-4">
+            <label for="inputPassword">密码：{{ obj.password }}</label>
+            {% if  obj.errors.password.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.password.0 }}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group col col-md-8 mb-4">
+            <label for="inputPassword2">确认密码：{{ obj.re_password }}</label>
+            {% if obj.errors.re_password.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.re_password.0 }}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputEmail">邮箱：{{ obj.email }}</label>
+            {% if obj.errors.email.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.email.0 }}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputMobile">联系方式：{{ obj.phone }}</label>
+            {% if obj.errors.phone.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.phone.0 }}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputName">真实姓名：{{ obj.name }}</label>
+            {% if obj.errors.name.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.name.0 }}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputStudentID">学号：{{ obj.school_num }}</label>
+            {% if obj.errors.username.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.username.0 }}
+              </div>
+              {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="inputSchool">校区：{{ obj.school }}</label>
+            <div class="invalid-feedback">需要选择所在校区</div>
+          </div>
+        </div>
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+        {{ message }}
+        </div>
+        {% endif %}
+        <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">注册</button>
+      </form>
+    </div>
+  </div>
 </body>
-
-</html>
+</html>>

@@ -7,13 +7,14 @@ from goods.models import Goods, Book
 
 # 用户表
 class Account(models.Model):
-    type = ((1, "正常状态"), (2, "封禁中"))
+    type = ((1, "正常状态"), (2, "封禁中"), (3, '未激活'))
+    type2 = ((1, "四平路校区"), (2, "嘉定校区"), (3, '闵行校区'))
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # 关联用户名，密码，邮箱
     status = models.IntegerField(choices=type, default=1)
     business_account = models.BooleanField(default=False)
-    school_num = models.IntegerField()
+    school_num = models.IntegerField(unique=True)
     name = models.CharField(max_length=10, default='')
-    school = models.CharField(max_length=255, default='')
+    school = models.IntegerField(choices=type2, default=1)
     phone = models.IntegerField()
     credit = models.IntegerField(default=90)
 

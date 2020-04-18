@@ -32,4 +32,7 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
     path('register/', register, name='register'),
+    path('update_password/', update_password, name='update_password'),
+    path('check_email/', check_email, name='check_email'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

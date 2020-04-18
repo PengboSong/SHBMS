@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Pengbo Song">
+    <title>{% block title %}二手书交易平台{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.4.1.min.css' %}">
+    <!-- jQuery, popper.js, Bootstrap JS -->
+    <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
+
+    <!-- Custom styles for this template -->
+    <!-- link rel="stylesheet" href="index.css" -->
+    {% block style %}
+    <style></style>
+    {% endblock %}
+  </head>
+<body class="bg-light">
+
+{% block topbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light pb-2 mb-2">
+  <a class="navbar-brand" href="{% url 'home' %}">二手书交易平台</a>
+  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarContents" aria-controls="navbarContents" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarContents">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'home' %}">首页<span class="sr-only">(current)</span></a>
+      </li>
+      {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'personal_center' user.pk %}">个人中心</a>
+      </li>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'site_help' %}">帮助</a>
+      </li>
+    </ul>
+    <form action="/search/" method="POST" enctype="multipart/form-data" class="form-inline mx-0 mx-md-3 my-2 my-md-0">
+      <input class="form-control mr-sm-2" name="book_index" type="text" placeholder="书名 / ISBN号" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-md-0" type="submit" value="submit_search_query">搜索</button>
+    </form>
+    {% if user.is_authenticated %}
+    <a class="btn btn-primary my-2 my-md-0" role="button" href="{% url 'logout' %}" type="submit">退出登录</a>
+    {% else %}
+    <a class="btn btn-primary my-2 my-md-0" role="button" href="{% url 'login' %}" type="submit">登录</a>
+    {% endif %}
+  </div>
+</nav>
+{% endblock %}
+
+<div class="container-fluid">
+  <div class="row">
+    {% block sidebar %}
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active btn btn-outline-primary" role="button" href="#">
+              所有分类<span class="sr-only">(current)</span>
+            </a>
+          </li>
+          {% for type in types %}
+          <li class="nav-item btn-group dropright">
+            <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'books_with_type' type.pk %}">{{ type.type_name }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
+    {% endblock %}
+
+    {% block mainbody %}
+    <main role="main" class="col-md-10 ml-sm-auto px-2">
+      <div class="d-flex flex-wrap flex-md-nowrap align-items-center">
+        <div id="carouselNotices" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            {% for book in top_books %}
+            {% if forloop.counter == 1 %}
+            <li data-target="#carouselNotices" data-slide-to="{{ forloop.counter }}" class="active"></li>
+            {% else %}
+            <li data-target="#carouselNotices" data-slide-to="{{ forloop.counter }}"></li>
+            {% endif %}
+            {% endfor %}
+          </ol>
+          <div class="carousel-inner">
+            {% for book in top_books %}
+            {% if forloop.counter == 1 %}
+            <div class="carousel-item active">
+            {% else %}
+            <div class="carousel-item">
+            {% endif %}
+              <div class="container d-flex flex-row">
+                <img src="{{ book.picture.url }}" width="40%" alt="">
+                <svg class="bd-placeholder-img" width="60%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMax slice" focusable="false" role="img">
+                  <rect width="100%" height="100%" fill="#777"/>
+                </svg>
+              </div>
+              <div class="container">
+                <div class="carousel-caption text-right">
+                  <h2>{{ book.full_title }}</h2>
+                  <p>作者：{{ book.authors }}</p>
+                  <a class="btn btn-lg btn-primary" role="button" href="{% url 'book_detail' book.pk %}">查看详情</a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselNotices" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselNotices" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h1 class="border-top mt-4 pt-2">畅销图书</h1>
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group btn-group-sm" role="group">
+            {% for type in types %}
+            <button type="button" class="btn btn-secondary">{{ type.type_name }}</button>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="row d-flex flex-wrap flex-md-nowrap my-3">
+          {% for item in 理学 %}
+          <div class="card col-md-3">
+            <img src="{{ item.picture.url }}" class="card-img-top">
+            <div class="card-body">
+              <p class="card-text h5">{{ item.full_title }}</p>
+              <p class="card-text">作者：{{ item.authors }}</p>
+              <a class="btn btn-sm btn-primary" role="button" href="{% url 'book_detail' item.pk %}">查看详情</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+    {% endblock %}
+  </div>
+</div>
+</body>
+
+{% block footer %}
+<footer class="border-top mt-4 pt-2 pb-4">
+  <div class="row">
+    <div class="col-12 col-md-3">
+      <p class="d-block text-muted text-center">&copy; 2020 Group Members</p>
+    </div>
+    <div class="col-6 col-md-2">
+      <h5 class="text-center">Block I</h5>
+      <ul class="list-unstyled text-small text-center">
+        <li><a class="text-muted" href="#">Term I</a></li>
+        <li><a class="text-muted" href="#">Term II</a></li>
+        <li><a class="text-muted" href="#">Term III</a></li>
+        <li><a class="text-muted" href="#">Term IV</a></li>
+        <li><a class="text-muted" href="#">Term V</a></li>
+      </ul>
+  </div>
+  <div class="col-6 col-md-2">
+    <h5 class="text-center">Block II</h5>
+    <ul class="list-unstyled text-small text-center">
+      <li><a class="text-muted" href="#">Term I</a></li>
+      <li><a class="text-muted" href="#">Term II</a></li>
+      <li><a class="text-muted" href="#">Term III</a></li>
+      <li><a class="text-muted" href="#">Term IV</a></li>
+      <li><a class="text-muted" href="#">Term V</a></li>
+    </ul>
+  </div>
+  <div class="col-6 col-md-2">
+    <h5 class="text-center">Block III</h5>
+    <ul class="list-unstyled text-small text-center">
+      <li><a class="text-muted" href="#">Term I</a></li>
+      <li><a class="text-muted" href="#">Term II</a></li>
+      <li><a class="text-muted" href="#">Term III</a></li>
+      <li><a class="text-muted" href="#">Term IV</a></li>
+      <li><a class="text-muted" href="#">Term V</a></li>
+    </ul>
+  </div>
+  <div class="col-6 col-md-2">
+    <h5 class="text-center">Block IV</h5>
+    <ul class="list-unstyled text-small text-center">
+      <li><a class="text-muted" href="#">Term I</a></li>
+      <li><a class="text-muted" href="#">Term II</a></li>
+      <li><a class="text-muted" href="#">Term III</a></li>
+      <li><a class="text-muted" href="#">Term IV</a></li>
+      <li><a class="text-muted" href="#">Term V</a></li>
+    </ul>
+  </div>
+</footer>
+{% endblock %}
+</html>

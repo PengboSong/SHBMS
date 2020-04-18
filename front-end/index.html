@@ -18,9 +18,9 @@
     <!-- link rel="stylesheet" href="index.css" -->
   </head>
   <body class="bg-light">
-
+{% if user.is_authenticated %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light pb-2 mb-2">
-  <a class="navbar-brand" href="#">Brand</a>
+  <a class="navbar-brand" href="{% url 'home'%}">Brand</a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarContents" aria-controls="navbarContents" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -64,6 +64,9 @@
               <a class="dropdown-item" href="#">Term I</a>
               <a class="dropdown-item" href="#">Term II</a>
               <a class="dropdown-item" href="#">Term III</a>
+	      <a class="dropdown-item" href="#">医学</a>
+                        <a class="dropdown-item" href="#">农学</a>
+                        <a class="dropdown-item" href="#">经济管理</a>
             </div>
           </li>
           <li class="nav-item btn-group dropright">

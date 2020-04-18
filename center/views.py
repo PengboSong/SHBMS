@@ -10,25 +10,22 @@ from . import form
 
 
 def personal_center(request, user_id):
-    my_goods = Goods.objects.filter(merchant=user_id)
-    trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(buyer=request.user))
-    my_3_goods = []
-    trans_3_record = []
-    length = len(my_goods)
-    if length > 3:
-        length = 3
-    for i in range(length):
-        my_3_goods.append(my_goods[i])
-    length = len(trans_records)
-    if length > 3:
-        length = 3
-    for j in range(length):
-        trans_3_record.append(trans_records[j])
-    context = {
-        'my_goods': my_3_goods,
-        'trans_records': trans_3_record
-    }
-    if request.user.pk == user_id:
+    if request.user.is_authenticated and request.user.pk == user_id:
+        my_goods = Goods.objects.filter(merchant=user_id)
+        trans_records = TransRecord.objects.filter(Q(seller=request.user) | Q(buyer=request.user))
+        trans_3_record = []
+        context={}
+        length = len(my_goods)
+        if length > 3:
+            length = 3
+        for i in range(length):
+            context[str(i)] = my_goods[i]
+        length = len(trans_records)
+        if length > 3:
+            length = 3
+        for j in range(length):
+            trans_3_record.append(trans_records[j])
+        context['trans_records'] = trans_3_record
         return render(request, 'center.html', context)
     else:
         return HttpResponse('您无权限访问该网页')
@@ -39,7 +36,7 @@ def my_book(request, user_id):
     context = {
         'my_goods': my_goods
     }
-    if request.user.pk == user_id:
+    if request.user.is_authenticated and request.user.pk == user_id:
         return render(request, 'my_book.html', context)
     else:
         return HttpResponse('您无权限访问该网页')
@@ -83,19 +80,19 @@ def sell_good(request, good_id):
 
 
 def personal_info(request, user_id):
-    my_account = get_object_or_404(Account,user=request.user)
-    context = {
+    if request.user.is_authenticated and request.user.pk == user_id:
+        my_account = get_object_or_404(Account,user=request.user)
+        context = {
         'my_account': my_account
-    }
-    if request.user.pk == user_id:
+        }
         return render(request, 'personal_info.html', context)
     else:
         return HttpResponse('您无权限访问该网页')
 
 
 def update_info(request, user_id):
-    my_account = get_object_or_404(Account, user=request.user)
     if request.user.pk == user_id:
+        my_account = get_object_or_404(Account, user=request.user)
         if request.method == "POST":
             obj = form.UpdateInfoForm(request.POST)
             if obj.is_valid():

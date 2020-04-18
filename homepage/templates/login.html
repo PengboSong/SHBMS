@@ -1,28 +1,49 @@
-<html>
+
+<!DOCTYPE html>
+<html lang="">
+
+{% load static %}
 <head>
-
     <meta charset="UTF-8">
-
-    <title>注册界面</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二手书交易平台</title> 
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{% static 'bootstrap/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </head>
-
-<body>
-
-         <form action="{% url 'login' %}" method="POST">
-
-               <p>用户名：<input type="username" name="username"></p>
-
-               <p>密码：<input type="password" name="password"></p>
-
-               <input type="submit" value="登录">
-		<a href="{% url 'register' %}">
-		<button>注册</botton></a>
-          </form>
-	  <p> {{message}}</p>
+<body class="bg-light" style="line-height: 20px">
 
 
+<script src="{% static 'js/form-validation.js' %}"></script>
+
+
+<body class="bg-light">
+  <div class="row justify-content-center">
+    <div class="col col-md-3">
+      <h3 class="mt-5 text-center mb-4">您好，请登录</h3>
+      <form class="needs-validation" action="{% url 'login' %}" method="POST" enctype="multipart/form-data" novalidate>
+        <div class="form-group mb-4">
+          <label for="inputUsername">用户名：</label>
+          <input class="form-control" type="text" id="inputUsername" name="username" required autofocus>
+        <div class="form-group mb-4">
+          <label for="inputPassword">密码：</label>
+          <input class="form-control" type="password" id="inputPassword" name="password" required>
+            <hr>
+        <div class="row justify-content-around mb-3">
+        <a class="btn btn-info" role="button" href="{% url 'check_email' %}">忘记密码</a>
+        <a class="btn btn-info" role="button" href="{% url 'register' %}">没有账户？现在注册</a>
+        </div>
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+        {{ message }}
+        </div>
+        {% endif %}
+        <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">登录</button>
+      </form>
+    </div>
+  </div>
 
 </body>
-
 </html>
+

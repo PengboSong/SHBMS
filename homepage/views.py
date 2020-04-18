@@ -6,7 +6,8 @@ from django.contrib import auth
 from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
-from . import forms
+from . import forms, send_email, models
+from .models import EmailVerifyRecord
 
 
 # 用于将一个书籍列表按销量取出top3
@@ -33,14 +34,14 @@ def homepage(request):
     show_all_books = sort_book(books)
     context = {
         'types': types,
-        'books': show_all_books,
     }
     for i in range(1, 13):
         book_type = BookType.objects.filter(pk=i)[0]
         book_with_type = Book.objects.filter(Q(book_type=book_type) & Q(book_status=1))
         show_book_type = sort_book(book_with_type)
         context[book_type.type_name] = show_book_type
-
+    for i in range(3):
+        context[str(i+1)] = show_all_books[i]
     return render(request, 'homepage.html', context)
 
 
@@ -55,14 +56,20 @@ def search(request):
 
 # 登录界面，若用户未登录则禁止进入网页
 def login(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
-    user = auth.authenticate(request, username=username, password=password)
-    if user is not None:
-        auth.login(request, user)
-        return redirect('/')
-    elif username:
-        return render(request, 'login.html', {'message': '用户名或密码不正确'})
+    if request.method == "POST":
+        username = request.POST.get('username', '')
+        if not username:
+            return render(request, 'login.html', {'message': '用户名不能为空'})
+
+        password = request.POST.get('password', '')
+        if not password:
+            return render(request, 'login.html', {'message': '密码不能为空'})
+        user = auth.authenticate(request, username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+        else:
+            return render(request, 'login.html', {'message': '用户名或密码不正确'})
     else:
         return render(request, 'login.html', {})
 
@@ -88,7 +95,6 @@ def register(request):
             else:
                 user = User.objects.create(username=username, password=make_password(password), email=email)
             if password != re_password:
-                print(password + re_password)
                 error = '两次密码输入不一致'
                 return render(request, 'register.html', {'obj': obj, 'message': error})
             else:
@@ -98,9 +104,43 @@ def register(request):
                 post.save()
                 return redirect('/')
         else:
-            return render(request, 'register.html', context={'message': error, 'obj': obj})
+            return render(request, 'register.html', context={'obj': obj})
     else:
         obj = forms.AccountModelForm()
-        return render(request, 'register.html', {'obj': obj})
+        return render(request, 'register.html', {'obj': obj,})
 
+
+def check_email(request):
+    if request.method == 'POST':
+        school_num = request.POST.get('school_num')
+        check_user = Account.objects.filter(school_num=int(school_num))
+        if check_user:
+            user = check_user[0].user
+            send_email.send_register_email(user.email)
+            record = EmailVerifyRecord.objects.filter(code=active_code)
+            if record:
+                record[0].delete()
+                return render(request, 'send_email.html', {'id': user.pk})
+            else:
+                return render(request, 'send_email.html', {'msg': '验证码输入错误'})
+        else:
+            return render(request, 'send_email.html', {'msg': '用户不存在'})
+    else:
+        return render(request, 'send_email.html')
+
+
+def update_password(request, user_id):
+    if request.method == 'POST':
+        obj = forms.PasswordForm(request.POST)
+        password = obj.cleaned_data['password']
+        re_password = obj.cleaned_data['re_password']
+        if password != re_password:
+            error = '两次密码输入不一致'
+            return render(request, 'update_password.html', {'obj': obj, 'message': error})
+        else:
+            User.objects.filter(id=user_id).update(password=password)
+            redirect('/')
+    else:
+        obj = forms.PasswordForm(request.POST)
+        return render(request, 'update_password.html', {'obj': obj})
 

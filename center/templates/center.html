@@ -1,79 +1,118 @@
-<html>
-<head>
-
-    <meta charset="UTF-8">
-    
+<!doctype html>
+  <head>
     {% extends 'homepage.html' %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Pengbo Song">
+      {% load static %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>个人中心</title> 
+        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="{% static 'bootstrap/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  <style>
+    .portrait-cycle {
+      border-radius: 100%;
+    }
+  </style>
+  </head>
 
-    <title>个人中心</title>
+<body class="bg-light">
+  {% block base%}
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active btn btn-outline-primary" role="button" href="#">
+              个人中心<span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_info' user.pk%}">
+              个人信息
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'my_book' user.pk %}">
+             我的图书
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'trans_info' user.pk %}">
+              我的交易记录
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-</head>
-
-<body>
-         {% block base%}
-
-
-    <hr>
-        
-        <a href="{% url 'personal_info' user.pk%}">
-          
-          <p>个人信息</p>
-
-        </a>
-
-        <a href="{% url 'my_book' user.pk %}">
-   
-          <p>我的图书</p>
-
-        </a>
-       <a href="{% url 'trans_info' user.pk %}">   
-
-          <p>交易记录</p>
-
-        </a>
-
-        <a href="{% url 'my_comment' user.pk %}">   
-
-          <p>留言记录</p>
-
-        </a>
-
-	<hr>
-	<h3>我的书籍</h3>
-	{% for my_good in my_goods %}
-	<p>
-		<img src="{{ my_good.picture_1.url}}"  alt="" height="35%" width="18%">
-		书名：{{my_good.book.full_title}}
-		价格：{{my_good.price}}
-	</p>
-	{% endfor %}
-	<a href="{% url 'my_book' user.pk %}">
-   
-          <p>点击查看更多</p>
-
-        </a>
-
-	<h3>我的交易记录</h3>
-	{% for trans_record in trans_records %}
-	<p>
-		书名：{{ trans_record.goods.full_title}}
-		卖家：{{trans_record.seller.username}}
-		买家:{{trans_record.buyer.username}}
-		价格：{{trans_record.price}}
-		交易时间：{{trans_record.order_time}}
-	<p>    
-	{% endfor %}
-        <a href="{% url 'trans_info' user.pk %}">   
-
-          <p>点击查看更多</p>
-
-        </a>
-
-
-    {% endblock %}	
-
-		
-
+    <main role="main" class="col-md-10 ml-sm-auto px-2">
+      <div class="row">
+        <div class="col-md-2">        
+          <button class="btn btn-light dropdown-toggle" type="button" id="lg-portrait" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="{% static 'bootstrap/001.jpg' %}" class="portrait-cycle" width="70%">
+          </button>
+          <div class="dropdown-menu" aria-labelledby="portrait-menu">
+            <a class="dropdown-item" href="{% url 'update_info' user.pk%}">修改个人信息</a>
+            <a class="dropdown-item" href="{% url 'check_email' %}">修改密码</a>
+            <a class="dropdown-item" href="{% url 'login' %}">切换账号</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
+          </div>
+          <p class="text-center">{{user.username}}</p>
+          <a class="btn btn-outline-success btn-block" role="button" href="{% url 'personal_info' user.pk%}">个人信息</a>
+        </div>
+        <div class="col">
+          <h2 class="border-top mt-4 pt-2">我的图书</h2>
+          <div class="row my-3">
+            <div class="card col-md-3">
+              <img src="{{ 1.picture_1.url}}" class="card-img-top" alt="暂无书籍 {{ 1.pk}}">
+              <p>{{ 1.book.full_title }}</p>
+              <p>￥{{1.price}}</p>
+            </div>
+              <div class="card col-md-3">
+                <img src="{{ 2.picture_1.url}}" class="card-img-top" alt="暂无书籍 {{ 2.pk}}">
+                <p>{{ 2.book.full_title }}</p>
+                <p>￥{{2.price}}</p>
+              </div>
+                <div class="card col-md-3">
+                  <img src="{{ 3.picture_1.url}}" class="card-img-top" alt="暂无书籍 {{3.pk}}">
+                  <p>{{ 3.book.full_title }}</p>
+                  <p>￥{{3.price}}</p>
+                </div>
+          </div>          
+          <h2 class="border-top mt-4 pt-2">我的交易记录</h2>
+          <table class="table text-center my-3">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" >书名</th>
+                <th scope="col">卖家</th>
+                <th scope="col">买家</th>
+                <th scope="col">价格</th>
+                <th scope="col">交易时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for trans_record in trans_records %}
+              <tr>
+                <td><strong>{{ trans_record.goods.full_title}}</strong></td>
+                <td>{{trans_record.seller.username}}</td>
+                <td>{{trans_record.buyer.username}}</td>
+                <td>￥{{trans_record.price}}</td>
+                <td>{{trans_record.order_time}}</td> 
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <a class="btn btn-outline-primary" href="{% url 'trans_info' user.pk %}">查看更多 &raquo;</a>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}	
 </body>
-
 </html>

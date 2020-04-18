@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -54,11 +55,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'SHBMS.urls'
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'bs_static'),
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,9 +125,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+# 图片上传相关
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'medias').replace('\\', '/')
 MEDIA_URL = '/media/'
+# 邮箱验证相关
+EMAIL_HOST = "smtp.qq.com "
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "1738800750@qq.com"  # 账号
+EMAIL_HOST_PASSWORD = "juumhgudgzxreieb"  # 密码
+EMAIL_USE_TLS = True
+EMAIL_FROM = "1738800750@qq.com"
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
