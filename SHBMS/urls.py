@@ -23,7 +23,8 @@ from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', homepage, name='home'),
+    path('', HomePageView.as_view(), name='home'),
+    path('login/', LoginView.as_view(), name='login'),
     path('book/', include('goods.urls')),
     path('book/', book_list, name='book'),
     path('search/', search, name='search'),

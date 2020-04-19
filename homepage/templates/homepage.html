@@ -68,9 +68,9 @@
               所有分类<span class="sr-only">(current)</span>
             </a>
           </li>
-          {% for type in types %}
+          {% for book_type in book_types %}
           <li class="nav-item btn-group dropright">
-            <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'books_with_type' type.pk %}">{{ type.type_name }}</a>
+            <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'books_with_type' book_type.pk %}">{{ book_type.type_name }}</a>
           </li>
           {% endfor %}
         </ul>
@@ -128,13 +128,13 @@
         <h1 class="border-top mt-4 pt-2">畅销图书</h1>
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group btn-group-sm" role="group">
-            {% for type in types %}
-            <button type="button" class="btn btn-secondary">{{ type.type_name }}</button>
+            {% for book_type in book_types %}
+            <button type="button" class="btn btn-secondary">{{ book_type.type_name }}</button>
             {% endfor %}
           </div>
         </div>
         <div class="row d-flex flex-wrap flex-md-nowrap my-3">
-          {% for item in 理学 %}
+          {% for item in book_type_names.0 %}
           <div class="card col-md-3">
             <img src="{{ item.picture.url }}" class="card-img-top">
             <div class="card-body">

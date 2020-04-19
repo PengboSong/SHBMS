@@ -4,9 +4,9 @@ from .models import MessageRecord, TransRecord, Account
 from goods.models import Goods, Book
 from django.http import Http404
 from django.utils import timezone
-from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import DeleteView
@@ -50,7 +50,7 @@ class MyBookView(TemplateView):
         else:
             return redirect('/')
 
-    def get_context_data(**kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['my_goods'] = Goods.objects.filter(merchant=user_id)
         return context

@@ -8,6 +8,9 @@ from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 from . import forms, send_email, models
 from .models import EmailVerifyRecord
+from django.contrib import messages
+from django.views.generic.base import TemplateView
+
 
 # 用于将一个书籍列表按销量取出top3
 # 销量来源：交易记录
@@ -26,21 +29,22 @@ def sort_book(book_list):
     return show_books
 
 # 主页：内含所有书籍销量top3和书籍按类型分类各类型top3
-def homepage(request):
-    types = BookType.objects.all()
-    books = Book.objects.filter(book_status=1)
-    show_all_books = sort_book(books)
-    context = {
-        'types': types,
-    }
-    for  i in range(1, 13):
-        book_type = BookType.objects.filter(pk=i)[0]
-        book_with_type = Book.objects.filter(Q(book_type=book_type) & Q(book_status=1))
-        show_book_type = sort_book(book_with_type)
-        context[book_type.type_name] = show_book_type
-    for i in range(3):
-        context[str(i+1)] = show_all_books[i]
-    return render(request, 'homepage.html', context)
+class HomePageView(TemplateView):
+    template_name = "homepage.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book_types = BookType.objects.all()
+        books = Book.objects.filter(book_status=1)
+        books_in_order = sort_book(books)
+
+        context['book_types'] = book_types
+        context['book_type_names'] = [book_type.type_name for book_type in book_types]
+        context['top_books'] = sort_book(Book.objects.all())
+        for book_type in book_types:
+            book_with_type = Book.objects.filter(Q(book_type=book_type) & Q(book_status=1))
+            context[book_type.type_name] = sort_book(book_with_type)
+        return context
 
 # 搜索界面，可以按照isbn编号或者书本标题进行搜索
 def search(request):
@@ -51,23 +55,35 @@ def search(request):
     return render(request, 'books_with_index.html', context)
 
 # 登录界面，若用户未登录则禁止进入网页
-def login(request):
-    if request.method == "POST":
-        username = request.POST.get('username', '')
-        if not username:
-            return render(request, 'login.html', {'message': '用户名不能为空'})
+class LoginView(TemplateView):
+    template_name = "login.html"
 
-        password = request.POST.get('password', '')
-        if not password:
-            return render(request, 'login.html', {'message': '密码不能为空'})
-        user = auth.authenticate(request, username=username, password=password)
-        if user is not None:
-            auth.login(request, user)
-            return redirect('/')
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if (username is None) or (password is None):
+            messages.warning(self.request, "用户名或密码不能为空")
+            return self.render_to_response()
         else:
-            return render(request, 'login.html', {'message': '用户名或密码不正确'})
-    else:
-        return render(request, 'login.html', {})
+            user = auth.authenticate(request, username=username, password=password)
+            if user is None:
+                messages.error(self.request, "用户名或密码不正确")
+            else:
+                auth.login(request, user)
+                return redirect('/')
+
+# def login(request):
+#     username = request.POST.get('username')
+#     password = request.POST.get('password')
+#     if (username is not None) and (password is not None):
+#         user = auth.authenticate(request, username=username, password=password)
+#         if user is not None:
+#             auth.login(request, user)
+#             return redirect('/')
+#         else:
+#             return render(request, 'login.html', {'message': '用户名或密码不正确'})
+#     else:
+#         return render(request, 'login.html', {})
 
 def logout(request):
     auth.logout(request)
