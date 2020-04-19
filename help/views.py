@@ -1,23 +1,39 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.views.generic.base import TemplateView
+
 from .models import Article, Notice
 
 
-def article(request, article_id):
-    site_article = get_object_or_404(Article, pk=article_id)
-    return render(request, 'article.html', {'article': site_article})
+class ArticleView(TemplateView):
+    template_name = "article.html"
 
-def notice(request, notice_id):
-    site_notice = get_object_or_404(Notice, pk=notice_id)
-    return render(request, 'notice.html', {'notice': site_notice})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        article_id = context["article_id"]
+        context["article"] = get_object_or_404(Article, pk=article_id)
+        return context
 
-def guide(request):
-    context = {
-        'articles': Article.objects.filter(pk__gt=1),
-    }
-    return render(request, 'help_guide.html', context)
+class NoticeView(TemplateView):
+    template_name = "notice.html"
 
-def site_help(request):
-    context = {
-        'notices': Notice.objects.all(),
-    }
-    return render(request, 'help_notice.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        notice_id = context["notice_id"]
+        context["article"] = get_object_or_404(Notice, pk=notice_id)
+        return context
+
+class GuideView(TemplateView):
+    template_name = "help_guide.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["articles"] = Article.objects.filter(pk__gt=1)
+        return context
+
+class SiteNoticesView(TemplateView):
+    template_name = "help_notice.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["notices"] = Notice.objects.all()
+        return context

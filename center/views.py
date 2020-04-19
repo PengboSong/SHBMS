@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from . import form
 from .models import MessageRecord, TransRecord, Account
 from goods.models import Goods, Book
 from django.http import Http404
@@ -38,8 +39,46 @@ class PersonalInfoView(TemplateView):
         else:
             return redirect('/')
 
+class UpdateInfoView(TemplateView):
+    template_name = "update_info.html"
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = context['user_id']
+        if request.user.id == user_id:
+            my_account = get_object_or_404(Account, user=request.user)
+            obj = form.UpdateInfoForm()
+            context['my_account'] = my_account
+            context['obj'] = obj
+            return self.render_to_response(context)
+        else:
+            return redirect('/')
+
+    def post(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = context['user_id']
+        if request.user.id == user_id:
+            obj = form.UpdateInfoForm(request.POST)
+            if obj.is_valid():
+                current_user = User.objects.filter(pk=user_id)
+                current_account = Account.objects.filter(user=request.user)
+                current_user.update(email=obj.cleaned_data['email'])
+                current_account.update(
+                    phone=obj.cleaned_data['phone'],
+                    school=obj.cleaned_data['school']
+                )
+                return redirect('personal_info', user_id=user_id)
+        else:
+            return redirect('/')
+
 class MyBookView(TemplateView):
     template_name = "my_book.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = context['user_id']
+        context['my_goods'] = Goods.objects.filter(merchant=user_id)
+        return context
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -49,18 +88,6 @@ class MyBookView(TemplateView):
             return self.render_to_response(context)
         else:
             return redirect('/')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['my_goods'] = Goods.objects.filter(merchant=user_id)
-        return context
-
-    def del_good(self, request, pk):
-        good_object = Goods.objects.filter(pk=pk)[0]
-        # good_object.delete()
-        messages.success(self.request, "商品删除成功")
-        context = self.get_context_data()
-        return self.render_to_response(context)
 
 class TransactionRecordView(TemplateView):
     template_name = "trans_record.html"
@@ -76,11 +103,12 @@ class TransactionRecordView(TemplateView):
             return redirect('/')
 
 class MyCommentView(TemplateView):
-    template_name = "trans_record.html"
+    template_name = "my_comment.html"
 
     def get(self, request, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        if request.user.id == context['user_id']:
+        user_id = context['user_id']
+        if request.user.id == user_id:
             context['my_comments'] = MessageRecord.objects.filter(to_id=context['user_id'])
             return self.render_to_response(context)
         else:
@@ -90,66 +118,44 @@ class DeleteGoodView(DeleteView):
     model = Goods
     success_url = reverse_lazy('my_book')
 
-def sell_good(request, good_id):
-    target_good = Goods.objects.filter(id=good_id)[0]
-    comments = MessageRecord.objects.filter(good_id=good_id)
-    buyers = [comment.from_id for comment in comments]
-    context = {
-        'target_good': target_good,
-        'buyers': buyers,
-    }
-    if request.method == "POST":
-        buyer_id = request.POST.get('buyer')
-        TransRecord.objects.create(seller=request.user, goods=target_good.book, buyer=User.objects.filter(pk=int(buyer_id))[0], order_time=timezone.now(), price=target_good.price)
-        Goods.objects.filter(id=good_id).update(status=3)
-        messages.success(request, "商品卖出成功")
-        return render(request, 'info.html')
-    elif target_good.status != 1:
-        messages.warning(request, '商品未上架，不能卖出')
-        return render(request, 'my_book.html', context)
-    else:
-        return HttpResponse('您无权限进行该操作')
+class SellGoodView(TemplateView):
+    template_name = "sell_good.html"
 
-def update_info(request, user_id):
-    if request.user.pk == user_id:
-        my_account = get_object_or_404(Account, user=request.user)
-        if request.method == "POST":
-            obj = form.UpdateInfoForm(request.POST)
-            if obj.is_valid():
-                User.objects.filter(pk=user_id).update(email=obj.cleaned_data['email'])
-                Account.objects.filter(user=request.user).update(phone=obj.cleaned_data['phone'],
-                                                                school=obj.cleaned_data['school'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        good_id = context['good_id']
+        target_good = Goods.objects.filter(id=good_id)[0]
+        comments = MessageRecord.objects.filter(good_id=good_id)
+        context['target_good'] = target_good
+        context['buyers'] = [comment.from_id for comment in comments]
+        return context
 
-                return HttpResponse('修改成功')
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        target_good = context['target_good']
+        if target_good.status != 1:
+            messages.warning(request, '商品未上架，不能卖出')
+            return redirect('my_book', user_id=user_id)
         else:
-            obj = form.UpdateInfoForm(request.POST)
-            return render(request, 'update_info.html',{'my_account': my_account, 'obj': obj})
-    else:
-        return HttpResponse('您无权限访问该网页')
+            return self.render_to_response(context)
 
-
-def trans_info(request, user_id):
-    trans_records = TransRecord.objects.filter(seller=request.user)
-    buy_records = TransRecord.objects.filter(buyer=request.user)
-    context = {
-        'trans_records': trans_records,
-        'buy_records': buy_records
-    }
-    if request.user.pk == user_id:
-        return render(request, 'trans_record.html', context)
-    else:
-        return HttpResponse('您无权限访问该网页')
-
-
-def my_comment(request, user_id):
-    if request.user.id == user_id:
-        my_comments = MessageRecord.objects.filter(to_id=user_id)
-        context = {
-            'my_comments': my_comments,
-        }
-        return render(request, 'my_comment.html', context)
-    else:
-        return HttpResponse("你没有权限访问该网页", status=404)
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        buyer_id = request.POST.get('buyer')
+        good_id = context['good_id']
+        target_good = context['target_good']
+        if buyer_id:
+            TransRecord.objects.create(
+                seller=request.user,
+                goods=target_good.book,
+                buyer=User.objects.filter(pk=int(buyer_id))[0],
+                order_time=timezone.now(),
+                price=target_good.price
+            )
+            Goods.objects.filter(id=good_id).update(status=3)
+            return HttpResponse("商品卖出成功")
+        else:
+            return redirect('my_book', user_id=user_id)
 
 
 def reply(request, comment_id):

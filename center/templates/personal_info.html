@@ -1,48 +1,6 @@
-{% extends 'homepage.html' %}
+{% extends 'center.html' %}
 
 {% block title %}二手书交易平台 - 个人信息{% endblock %}
-
-{% block style %}
-<style>
-  .portrait-cycle {
-    border-radius: 100%;
-  }
-</style>
-{% endblock %}
-
-{% block sidebar %}
-<nav class="col-md-2 d-none d-md-block bg-light sidebar">
-  <div class="sidebar-sticky">
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_center' user.pk %}">
-          个人主页
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'personal_info' user.pk %}">
-          个人信息<span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'my_book' user.pk %}">
-          我的图书
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'trans_info' user.pk %}">
-          交易记录
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'my_comment' user.pk %}">
-          留言查复
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
-{% endblock %}
 
 {% block mainbody %}
 <main role="main" class="col-md-10 ml-sm-auto px-2">
@@ -51,7 +9,7 @@
       <img src="{% static 'image/sample_portrait001.jpg' %}" class="portrait-cycle" width="100%">
     </div>
     <div class="col">
-      <form>
+      <form method="POST" action="{% url 'update_info' user.pk %}">
         <div class="form-group row">
           <label for="staticStatus" class="col-sm-2 col-form-label strong">帐号状态</label>
           <div class="col-sm-10">
@@ -76,6 +34,7 @@
             <input type="text" class="form-control-plaintext" id="staticUsername" value="{{ my_account.user.username }}" readonly>
           </div>
         </div>
+        {% block update-info %}
         <div class="form-group row">
           <label for="staticEmail" class="col-sm-2 col-form-label">邮箱</label>
           <div class="col-sm-10">
@@ -94,21 +53,26 @@
             <input type="text" class="form-control-plaintext" id="staticEmail" value="{{ my_account.school }}" readonly>
           </div>
         </div>
+        {% endblock %}
         <div class="form-group row">
           <label for="staticEmail" class="col-sm-2 col-form-label">信用分</label>
           <div class="col-sm-10">
             <input type="text" class="form-control-plaintext" id="staticEmail" value="{{ my_account.credit }}" readonly>
           </div>
         </div>
+        {% block update-button %}
+        {% endblock %}
       </form>
     </div>
   </div>
 
+  {% block hide-button %}
   <div class="row justify-content-center">
     <div class="col-md-6">
       <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'update_info' user.pk %}">修改个人信息</a>
     </div>
   </div>
+  {% endblock %}
 
 </main>
 {% endblock %}

@@ -3,7 +3,6 @@
 {% block title %}二手书交易平台 - 请登录{% endblock %}
 
 {% block additional_script %}
-<script src="{% static 'js/form-validation.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -15,22 +14,24 @@
         <div class="form-group mb-4">
           <label for="inputUsername">用户名：</label>
           <input class="form-control" type="text" id="inputUsername" name="username" required autofocus>
-          <div class="invalid-feedback">用户名不能为空</div>
         </div>
         <div class="form-group mb-4">
           <label for="inputPassword">密码：</label>
           <input class="form-control" type="password" id="inputPassword" name="password" required>
-          <div class="invalid-feedback">密码不能为空</div>
         </div>
         <div class="row justify-content-around mb-3">
-        <a class="btn btn-info" role="button" href="{% url 'home' %}">游客登录</a>
-        <a class="btn btn-info" role="button" href="{% url 'register' %}">没有账户？现在注册</a>
+          <a class="btn btn-info my-3" role="button" href="{% url 'check_email' %}">忘记密码</a>
+          <a class="btn btn-info my-3" role="button" href="{% url 'register' %}">没有账户？现在注册</a>
         </div>
-        {% if message %}
-        <div class="alert alert-danger" role="alert">
-        {{ message }}
-        </div>
+        
+        {% if messages %}
+        <ul class="list-unstyled">
+          {% for message in messages %}
+          <li class="alert alert-{{ message.tags }} text-center my-3">{{ message }}</li>
+          {% endfor %}
+        </ul>
         {% endif %}
+
         <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">登录</button>
       </form>
     </div>

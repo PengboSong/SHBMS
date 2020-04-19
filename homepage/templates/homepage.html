@@ -22,6 +22,7 @@
     {% endblock %}
   </head>
 <body class="bg-light">
+{% if user.is_authenticated %}
 
 {% block topbar %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light pb-2 mb-2">
@@ -35,11 +36,9 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'home' %}">首页</span></a>
       </li>
-      {% if user.is_authenticated %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'personal_center' user.pk %}">个人中心</a>
       </li>
-      {% endif %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'site_help' %}">帮助</a>
       </li>
@@ -48,11 +47,7 @@
       <input class="form-control mr-sm-2" name="book_index" type="text" placeholder="书名 / ISBN号" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-md-0" type="submit" value="submit_search_query">搜索</button>
     </form>
-    {% if user.is_authenticated %}
     <a class="btn btn-primary my-2 my-md-0" role="button" href="{% url 'logout' %}" type="submit">退出登录</a>
-    {% else %}
-    <a class="btn btn-primary my-2 my-md-0" role="button" href="{% url 'login' %}" type="submit">登录</a>
-    {% endif %}
   </div>
 </nav>
 {% endblock %}
@@ -65,12 +60,19 @@
         <ul class="nav flex-column">
           <li class="nav-item">
             <a class="nav-link active btn btn-outline-primary" role="button" href="#">
-              所有分类<span class="sr-only">(current)</span>
+              所有分类
             </a>
           </li>
-          {% for book_type in book_types %}
+          {% for subtype in sub_categories %}
           <li class="nav-item btn-group dropright">
-            <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'books_with_type' book_type.pk %}">{{ book_type.type_name }}</a>
+            <a class="nav-link btn btn-outline-primary dropdown-toggle" role="button" id="sub_category_{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ subtype.name }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="category_{{ forloop.counter }}_menu">
+              {% for key, value in subtype.list.items %}
+              <a class="dropdown-item" href="{% url 'books_with_type' key %}">{{ value }}</a>
+              {% endfor %}
+            </div>
           </li>
           {% endfor %}
         </ul>
@@ -134,7 +136,7 @@
           </div>
         </div>
         <div class="row d-flex flex-wrap flex-md-nowrap my-3">
-          {% for item in book_type_names.0 %}
+          {% for item in book_type_names.first %}
           <div class="card col-md-3">
             <img src="{{ item.picture.url }}" class="card-img-top">
             <div class="card-body">
@@ -150,7 +152,12 @@
     {% endblock %}
   </div>
 </div>
-</body>
+
+{% else %}
+
+<p>您未登录，<a href="{% url 'login' %}">点此登录</a></p>
+
+{% endif %}
 
 {% block footer %}
 <footer class="border-top mt-4 pt-2 pb-4">
@@ -200,4 +207,6 @@
   </div>
 </footer>
 {% endblock %}
+</body>
+
 </html>

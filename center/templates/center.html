@@ -15,8 +15,8 @@
   <div class="sidebar-sticky">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'personal_center' user.pk %}">
-          个人主页<span class="sr-only">(current)</span>
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'personal_center' user.pk %}">
+          个人主页
         </a>
       </li>
       <li class="nav-item">
@@ -87,7 +87,7 @@
         <tbody>
           {% for trans_record in trans_records %}
           <tr>
-            <td><strong>1</strong></td>
+            <td><strong>{{ forloop.counter }}</strong></td>
             <td>
               <img src="{{ my_good.picture_1.url }}" width="80" alt="">
             </td>

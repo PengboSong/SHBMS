@@ -3,7 +3,6 @@
 {% block title %}二手书交易平台 - 用户注册{% endblock %}
 
 {% block additional_script %}
-<script src="{% static 'js/form-validation.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -74,11 +73,15 @@
             <label for="inputSchool">校区：{{ obj.school }}</label>
           </div>
         </div>
-        {% if message %}
-        <div class="alert alert-danger" role="alert">
-        {{ message }}
-        </div>
+
+        {% if messages %}
+        <ul class="list-unstyled">
+          {% for message in messages %}
+          <li class="alert alert-{{ message.tags }} text-center my-3">{{ message }}</li>
+          {% endfor %}
+        </ul>
         {% endif %}
+
         <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">注册</button>
       </form>
     </div>

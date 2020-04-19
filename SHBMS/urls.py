@@ -16,23 +16,25 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
+
+from . import settings
 from homepage.views import *
 from goods.views import book_list
-from . import settings
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('', HomePageView.as_view(), name='home'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('book/', include('goods.urls')),
-    path('book/', book_list, name='book'),
     path('search/', search, name='search'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', logout, name='logout'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('update_password/', UpdatePasswordView.as_view(), name='update_password'),
+    path('check_email/', check_email, name='check_email'),
+
     path('center/', include('center.urls')),
     path('help/', include('help.urls')),
-    path('login/', login, name='login'),
-    path('logout/', logout, name='logout'),
-    path('register/', register, name='register'),
-    path('update_password/', update_password, name='update_password'),
-    path('check_email/', check_email, name='check_email'),
+    path('book/', include('goods.urls')),
+    path('book/', book_list, name='book'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
