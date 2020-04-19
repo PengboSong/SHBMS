@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Pengbo Song">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-4.4.1.min.css' %}">
+    <!-- jQuery, popper.js, Bootstrap JS -->
+    <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
+    {% block additional_script %}{% endblock %}
+
+    <!-- Custom styles for this template -->
+    {% block style %}
+    <style></style>
+    {% endblock %}
+  </head>
+{% block content %}
+<body class="bg-light">
+</body>
+{% endblock %}
+
+{% block footer %}
+<footer class="border-top mt-4 pt-2 pb-4">
+<p class="text-center">&copy; 2020 Group Members</p>
+</footer>
+{% endblock %}
+</html>

@@ -1,0 +1,69 @@
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    
+    {% extends 'homepage.html' %}
+
+    <title>{{ good.title }}</title>
+
+</head>
+
+<body>
+
+
+	{% block base%}
+     <hr>
+
+    <h3>{{ good.book.full_title }}</h3>
+    <p>作者：{{ good.book.authors }}</p>
+    
+    <p>ISBN编号：{{ good.book.ISBN_num }}</p>
+    <p>出版商：{{ good.book.publisher }}</p>
+    <p>原价：{{ good.book.original_price }}</p>
+
+    <p>分类：
+
+        <a href="{% url 'books_with_type' good.book.book_type.pk %}">
+
+            {{ good.book.book_type }}
+
+        </a>
+
+    </p>
+    <p>
+        <img src="{{ good.picture_1.url}}"  alt="" height="35%" width="18%">
+
+	{% if good.picture_2 %}
+
+        <img src="{{ good.picture_2.url}}"  alt="" height="35%" width="18%">
+
+	{% endif %}
+    </p>
+
+    <p>卖家：{{ good.merchant }}</p>
+
+    <p>
+        描述：{{ good.description}}
+    </p>
+
+    <p>{{ user.username }}，如果想购买此书，请<a href="{% url 'comment' good.pk %}">点击此处</a>与卖家联系</p>
+
+
+    <hr>
+
+	<pre>
+
+
+
+
+
+	</pre>
+	{% endblock %}
+
+
+</body>
+
+</html>

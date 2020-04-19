@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+     {% extends 'homepage.html' %}
+
+    <title>搜索结果</title>
+
+</head>
+
+<body>
+
+
+	{% block base%}
+
+    <hr>
+
+    {% for book in books %}
+
+	<p><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></p>
+
+	<h3>{{ book.full_title }}</h3>
+	
+	<p>{{ book.authors }}</p>
+
+         <a href="{% url 'book_detail' book.id %}">查看详情</a>
+
+     {% endfor %}
+     <p>没找到想要的书籍？<a href="{% url 'create_new_book' %}">点此上架</a></p>	
+	{% endblock %}
+
+
+</body>
+
+</html>

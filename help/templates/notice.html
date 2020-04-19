@@ -1,0 +1,34 @@
+{% extends 'homepage.html' %}
+{% block title %}{{ notice.title }}{% endblock %}
+
+{% block sidebar %}
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link active btn btn-outline-primary" role="button" href="{% url 'site_help'%}">
+          公告动态<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'guide'%}">
+          购书指南
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary" role="button" href="{% url 'article' 1 %}">
+          关于我们
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <h2 class="text-center py-3">{{ article.title }}</h2>
+  <p class="h5 border-bottom text-right pb-3">发布时间：{{ notice.comment_time }}</p>
+  <p class="mx-4 mt-3 mb-5">{{ article.content }}</p>
+</main>
+{% endblock %}
