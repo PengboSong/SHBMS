@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 
 # 自定义数据（char）
@@ -27,6 +29,8 @@ class BookType(models.Model):
 # book_type变量，外键对应书籍类型表；
 # 校园二手书交易特点：对某本特定书籍的买卖需求量很大，所以建立书籍表方便对某本特定书籍进行操作
 class Book(models.Model):
+    status = ((1, "上架中"), (2, "待处理"), (3, "已下架"))
+    book_status = models.IntegerField(choices=status, default=2)
     book_type = models.ForeignKey(BookType, on_delete=models.DO_NOTHING)
     full_title = models.CharField(max_length=255)
     ISBN_num = models.CharField(max_length=13, unique=True)
@@ -34,10 +38,11 @@ class Book(models.Model):
     authors = models.CharField(max_length=255)
     picture = models.ImageField(upload_to='books_images')
     original_price = models.DecimalField(max_digits=19, decimal_places=2)
+    sale_volume = models.IntegerField(default=0)
 
 
 # 商品表
-# 变量status：显示商品状态。商品由用户上架后均处于待审核状态，待管理员审核完成后进行前端显示
+# 变量status：显示商品状态。默认上架，当用户选择下架商品或卖出商品后状态为下架，当用户被封禁，再次尝试登录时该用户卖的商品自动下架
 # 变量book：外键，关联Book表，建立对应关系后，用户只需填写价格，描述，图片就可上架商品，大大简化了上架流程
 # 变量merchant：外键，关联用户表。在上架商品时系统自动调用登录用户作为merchant的值
 # 变量picture_1:图片文件，用于展示商品特征（必填）；picture_2:选填
@@ -50,3 +55,9 @@ class Goods(models.Model):
     picture_1 = models.ImageField(upload_to='goods_images', blank=False)
     picture_2 = models.ImageField(upload_to='goods_images', blank=True)
     status = models.IntegerField(choices=type)
+
+
+@receiver(pre_delete, sender=Goods)
+def file_delete(instance, **kwargs):
+    instance.picture_1.delete(True)
+    instance.picture_2.delete(True)

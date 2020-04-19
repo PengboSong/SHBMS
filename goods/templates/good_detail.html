@@ -23,7 +23,6 @@
     <p>ISBN编号：{{ good.book.ISBN_num }}</p>
     <p>出版商：{{ good.book.publisher }}</p>
     <p>原价：{{ good.book.original_price }}</p>
-
     <p>分类：
 
         <a href="{% url 'books_with_type' good.book.book_type.pk %}">
@@ -33,6 +32,7 @@
         </a>
 
     </p>
+
     <p>
         <img src="{{ good.picture_1.url}}"  alt="" height="35%" width="18%">
 
@@ -43,7 +43,7 @@
 	{% endif %}
     </p>
 
-    <p>卖家：{{ good.merchant }}</p>
+    <p>卖家：{{ good.merchant }} 该卖家已在该网站卖出{{ sell_num }}本书。信用分为：{{credit_point}}</p>
 
     <p>
         描述：{{ good.description}}

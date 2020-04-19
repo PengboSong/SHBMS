@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import MessageRecord, TransRecord, Account
-from goods.models import Goods
+from goods.models import Goods, Book
 from django.http import Http404
 from django.utils import timezone
 from django.contrib import messages
@@ -108,7 +108,49 @@ def sell_good(request, good_id):
         messages.warning(request, '商品未上架，不能卖出')
         return render(request, 'my_book.html', context)
     else:
-        return render(request, 'sell_good.html', context)
+        return HttpResponse('您无权限进行该操作')
+
+def update_info(request, user_id):
+    if request.user.pk == user_id:
+        my_account = get_object_or_404(Account, user=request.user)
+        if request.method == "POST":
+            obj = form.UpdateInfoForm(request.POST)
+            if obj.is_valid():
+                User.objects.filter(pk=user_id).update(email=obj.cleaned_data['email'])
+                Account.objects.filter(user=request.user).update(phone=obj.cleaned_data['phone'],
+                                                                school=obj.cleaned_data['school'])
+
+                return HttpResponse('修改成功')
+        else:
+            obj = form.UpdateInfoForm(request.POST)
+            return render(request, 'update_info.html',{'my_account': my_account, 'obj': obj})
+    else:
+        return HttpResponse('您无权限访问该网页')
+
+
+def trans_info(request, user_id):
+    trans_records = TransRecord.objects.filter(seller=request.user)
+    buy_records = TransRecord.objects.filter(buyer=request.user)
+    context = {
+        'trans_records': trans_records,
+        'buy_records': buy_records
+    }
+    if request.user.pk == user_id:
+        return render(request, 'trans_record.html', context)
+    else:
+        return HttpResponse('您无权限访问该网页')
+
+
+def my_comment(request, user_id):
+    if request.user.id == user_id:
+        my_comments = MessageRecord.objects.filter(to_id=user_id)
+        context = {
+            'my_comments': my_comments,
+        }
+        return render(request, 'my_comment.html', context)
+    else:
+        return HttpResponse("你没有权限访问该网页", status=404)
+
 
 def reply(request, comment_id):
     comment = get_object_or_404(MessageRecord, pk=comment_id)

@@ -13,7 +13,6 @@
     <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-4.4.1.min.js' %}"></script>
-    {% block additional_script %}{% endblock %}
 
     <!-- Custom styles for this template -->
     <!-- link rel="stylesheet" href="index.css" -->
@@ -32,8 +31,8 @@
 
   <div class="collapse navbar-collapse" id="navbarContents">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'home' %}">首页</span></a>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'home' %}">首页<span class="sr-only">(current)</span></a>
       </li>
       {% if user.is_authenticated %}
       <li class="nav-item">

@@ -1,0 +1,27 @@
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>修改密码</title>
+
+</head>
+
+<body>
+   
+
+	<p>输入学号：</p>
+
+	<form method="POST" action="/check_email/">
+
+		 <input type="text" name="school_num" />
+
+		 <input type="submit" value="确定"/>
+        </form>
+	<p>{{ msg }}</p>
+	{% if id  %}
+	<a href="{% url 'update_password' id %}">跳转</a>
+	{% endif %}
+
+ 
+</body>
+</html>

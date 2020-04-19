@@ -2,13 +2,14 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Book, Goods, BookType
 from . import form
+from django.db.models import Q
 from django.utils import timezone
-from center.models import MessageRecord
+from center.models import MessageRecord, TransRecord, Account
 from django.contrib.auth.models import User
 
 
 def book_list(request):
-    books = Book.objects.all()
+    books = Book.objects.filter(book_status=1)
     context = {
         'books': books
     }
@@ -19,7 +20,7 @@ def book_detail(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     context = {
         'book': book,
-        'goods': Goods.objects.filter(book=book)
+        'goods': Goods.objects.filter(Q(book=book) & Q(status=1))
     }
     return render(request, 'book_detail.html', context)
 
@@ -40,13 +41,17 @@ def create_new_book(request):
         if obj.is_valid():
             post = obj.save(commit=False)
             post.picture = file_obj
+            post.status = 2
             post.save()
-            return HttpResponse("数据提交成功！！")
+            return HttpResponse("数据提交成功,正在等待审核，审核通过后即可上架")
         else:
             return render(request, "create_new_book.html", {'obj': obj})
     else:
-        obj = form.BookModelForm()
-        return render(request, "create_new_book.html", {'obj': obj})
+        if get_object_or_404(Account, user=request.user).status == 1:
+            obj = form.BookModelForm()
+            return render(request, "create_new_book.html", {'obj': obj})
+        else:
+            return HttpResponse('您无权限进行此操作')
 
 
 def up_shelf(request, book_id):
@@ -67,13 +72,19 @@ def up_shelf(request, book_id):
         else:
             return render(request, "up_shelf.html", {'obj2': obj2, 'book': book[0]})
     else:
-        obj2 = form.GoodsModelForm()
-        return render(request, "up_shelf.html", {'obj2': obj2, 'book': book[0]})
+        if get_object_or_404(Account, user=request.user).status == 1:
+            obj2 = form.GoodsModelForm()
+            return render(request, "up_shelf.html", {'obj2': obj2, 'book': book[0]})
+        else:
+            return HttpResponse('您无权限进行此操作')
 
 
 def good_detail(request, good_id):
-    good = get_object_or_404(Goods, pk=good_id)
-    return render(request, "good_detail.html", {'good': good})
+    good = Goods.objects.filter(pk=good_id)[0]
+    sell_book = TransRecord.objects.filter(seller=request.user)
+    sell_num = len(sell_book)
+    credit_point = get_object_or_404(Account, user=request.user).credit
+    return render(request, "good_detail.html", {'good': good, 'sell_num': sell_num, 'credit_point': credit_point})
 
 
 def comment(request, good_id):
@@ -86,4 +97,7 @@ def comment(request, good_id):
         MessageRecord.objects.create(content=view, from_id=request.user, to_id=good.merchant, good_id=good, comment_time=timezone.now)
         return HttpResponse('评论成功')
     else:
-        return render(request, 'comment.html', context)
+        if get_object_or_404(Account, user=request.user).status == 1:
+            return render(request, 'comment.html', context)
+        else:
+            return HttpResponse('您无权限进行此操作')
