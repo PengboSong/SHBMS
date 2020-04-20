@@ -1,23 +1,20 @@
-<head>
+{% extends 'homepage.html' %}
 
-    <meta charset="UTF-8">
-
-    <title>评论留言</title>
-    {% extends 'homepage.html' %}
-
-</head>
-
-<body>
-   	{% block base%}
-
-	<form method="POST" action="/book/comment/{{good.pk}}">
-
-		 <input type="text" name="comment" />
-
-		 <input type="submit" value="留言"/>
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <div class="row justify-content-center my-5">
+    <div class="col col-md-8">
+      <div class="card d-block">
+        <a class="btn btn-lg btn-success mt-4 ml-3" role="button" href="{% url 'good_detail' good.pk %}">返回</a>
+        <p class="card-title text-word-wrap text-center h3 mt-3 mb-5">您正在写对 《{{ good.book.full_title }}》 的留言</p>
+        <form class="mx-4" method="POST" action="{% url 'comment' good.pk %}">
+          <textarea class="form-control" type="text" name="comment" placeholder="在此输入您的留言"></textarea>
+          <div class="row justify-content-center mt-4 mb-5">
+            <input class="btn btn-lg btn-primary" role="button" type="submit" value="提交" />
+          </div>          
         </form>
-	{% endblock %}
-
- 
-</body>
-</html>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -11,6 +11,43 @@ from .models import EmailVerifyRecord
 from goods.models import Book, BookType
 from center.models import TransRecord, Account
 
+# 返回书籍分类字典
+def get_sub_categories():
+    return [
+        {
+            "name": "理工类",
+            "list": {
+                1: "理学",
+                2: "医学",
+                3: "计算机",
+                4: "工学",
+                7: "经济管理",
+                13: "农学",
+            }
+        },
+        {
+            "name": "人文艺术类",
+            "list": {
+                5: "人文",
+                6: "法律",
+                8: "语言学",
+                9: "心理",
+                10: "哲学",
+                11: "艺术",
+                12: "教育",
+            }
+        },
+        {
+            "name": "其他",
+            "list": {
+                14: "小说",
+                15: "散文",
+                16: "诗歌",
+                17: "其他",
+            }
+        }
+    ]
+
 
 # 用于将一个书籍列表按销量取出top3
 # 销量来源：交易记录
@@ -31,40 +68,7 @@ class HomePageView(TemplateView):
         books = Book.objects.filter(book_status=1)
         books_in_order = sort_book(books)
 
-        sub_categories = [
-            {
-                "name": "理工类",
-                "list": {
-                    1: "理学",
-                    2: "医学",
-                    3: "计算机",
-                    4: "工学",
-                    7: "经济管理",
-                    13: "农学",
-                }
-            },
-            {
-                "name": "人文艺术类",
-                "list": {
-                    5: "人文",
-                    6: "法律",
-                    8: "语言学",
-                    9: "心理",
-                    10: "哲学",
-                    11: "艺术",
-                    12: "教育",
-                }
-            },
-            {
-                "name": "其他",
-                "list": {
-                    14: "小说",
-                    15: "散文",
-                    16: "诗歌",
-                    17: "其他",
-                }
-            }
-        ]
+        sub_categories = get_sub_categories()
 
         context['sub_categories'] = sub_categories
         context['book_types'] = book_types
@@ -84,7 +88,8 @@ class HomePageView(TemplateView):
 def search(request):
     book_index = request.POST.get('book_index', None)
     context = {
-        'books': Book.objects.filter(Q(full_title=book_index) | Q(ISBN_num=book_index) & Q(book_status=1))
+        'books': Book.objects.filter(Q(full_title=book_index) | Q(ISBN_num=book_index) & Q(book_status=1)),
+        'sub_categories': get_sub_categories()
     }
     return render(request, 'books_with_index.html', context)
 

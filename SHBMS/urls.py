@@ -19,7 +19,7 @@ from django.urls import path, include
 
 from . import settings
 from homepage.views import *
-from goods.views import book_list
+from goods.views import BookListView
 
 
 urlpatterns = [
@@ -36,5 +36,5 @@ urlpatterns = [
     path('center/', include('center.urls')),
     path('help/', include('help.urls')),
     path('book/', include('goods.urls')),
-    path('book/', book_list, name='book'),
+    path('book/', BookListView.as_view(), name='book'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,55 +1,22 @@
+{% extends 'homepage.html' %}
 
-<html>
-
-<head>
-
-    <meta charset="UTF-8">
-    {% extends 'homepage.html' %}
-
-    <title>{{ book.title }}</title>
-
-</head>
-<style>
-pre{font-size: 16px; font-family: "微软雅黑";}
-</style>
-
-<body>
-
-{% block base%}
-     <hr>
-
-        <a href="{% url 'up_shelf' book.pk %}"><h3>点此上架此书</h3></a>
-
-    <hr>
-
-    <h3>此处为该书已上架信息</h3>
-    
-    {% for good in goods %}
-	<h3>{{ good.book.full_title }}</h3>
-	<img src="{{ good.picture_1.url}}"  alt="" height="35%" width="18%">
-	{% if good.picture_2 %}
-	<img src="{{ good.picture_2.url}}"  alt="" height="35%" width="18%">
-	{% endif %}
-	<pre>卖家：{{good.merchant}}      价格：{{ good.price }}    <a href="{% url 'good_detail' good.pk %}">查看详情</a></pre>
-    
-     
-    {% empty %}
-
-    <p>暂无卖家上架，敬请期待</p>
-    
-    {% endfor %}
-     
-	<pre>
-
-
-
-
-
-	</pre>
-
-	{% endblock %}
-
-
-</body>
-
-</html>
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  {% for good in goods %}
+  <h3>{{ good.book.full_title }}</h3>
+  <img src="{{ good.picture_1.url }}" alt="" height="35%" width="18%">
+  {% if good.picture_2 %}
+  <img src="{{ good.picture_2.url }}" alt="" height="35%" width="18%">
+  {% endif %}
+  <pre>卖家：{{good.merchant}}      价格：{{ good.price }}    <a href="{% url 'good_detail' good.pk %}">查看详情</a></pre>
+  {% empty %}
+  <p class="alert alert-warning text-center my-3">暂无卖家上架，敬请期待</p>
+  {% endfor %}
+  
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'up_shelf' book.pk %}">点此上架此书</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

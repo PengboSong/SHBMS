@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, Http404
+from django.shortcuts import redirect, get_object_or_404
+from django.http import HttpResponse
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib import messages
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import DeleteView
 
 from . import form
 from .models import MessageRecord, TransRecord, Account

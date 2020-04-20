@@ -1,41 +1,75 @@
-<!DOCTYPE html>
+{% extends 'homepage.html' %}
 
-<html lang="en">
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <div class="row justify-content-center">
+    <div class="col col-md-8">
+      <h3 class="text-center mt-3 mb-5">上传新书</h3>
 
-<head>
-
-    <meta charset="UTF-8">
-    {% extends 'homepage.html' %}
-    
-    <title>增加书籍信息</title>
-
-</head>
-
-<body>
-    {% block base%}
-   <h3>增加书籍信息</h3>
-    <hr>
-
-    <form action="/book/create/" method="POST" enctype="multipart/form-data">
-
-      <table>
-
-        <p>书籍类型：{{ obj.book_type }}</p>
-	<p>书名全称：{{ obj.full_title }}</p>
-	<p>ISBN编号：{{ obj.ISBN_num }}</p>
-	<p>作者（多作者用“/”分开）：{{ obj.authors }}</p>
-	<p>原价：{{ obj.original_price }}</p>
-	<p>出版商：{{ obj.publisher }}</p>
-
-    <p>上传图片  <input type="file" name="pic"></p>
-
-    </table>
-
-    <input type="submit" value="提交"> 
-
-    </form>
-    {% endblock %}
-
-</body>
-
-</html>
+      <form action="{% url 'create_new_book' %}" method="POST" enctype="multipart/form-data">
+        <div class="row">
+          <div class="form-group col col-md-8 mb-4">
+            <label for="{{ obj.full_title.id_for_label }}">{{ obj.full_title.label }}：</label>
+            {{ obj.full_title }}
+            {% if obj.errors.full_title.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.full_title.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col col-md-8 mb-4">
+            <label for="{{ obj.authors.id_for_label }}">{{ obj.authors.label }}（多个作者用"/"分开）：</label>
+            {{ obj.authors }}
+            {% if obj.errors.authors.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.authors.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="{{ obj.ISBN_num.id_for_label }}">{{ obj.ISBN_num.label }}：</label>
+            {{ obj.ISBN_num }}
+            {% if obj.errors.ISBN_num.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.ISBN_num.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="{{ obj.publisher.id_for_label }}">{{ obj.publisher.label }}：</label>
+            {{ obj.publisher }}
+            {% if obj.errors.publisher.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.publisher.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="{{ obj.original_price.id_for_label }}">{{ obj.original_price.label }}：</label>
+            {{ obj.original_price }}
+            {% if obj.errors.original_price.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.original_price.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="{{ obj.book_type.id_for_label }}">{{ obj.book_type.label }}：</label>
+            {{ obj.book_type }}
+            {% if obj.errors.book_type.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.book_type.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col col-md-8 mb-4">
+            <label for="InputPic">图片上传</label>
+            <input type="file" class="form-control-file" id="InputPic" name="pic">
+          </div>
+          <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">确认提交</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}

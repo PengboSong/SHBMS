@@ -14,7 +14,8 @@
       <form class="needs-validation" action="{% url 'register' %}" method="POST" enctype="multipart/form-data" novalidate>
         <div class="row">
           <div class="form-group col col-md-8 mb-4">
-            <label for="inputUsername">用户名：{{ obj.username }}</label>
+            <label for="{{ obj.username.id_for_label }}">{{ obj.username.label }}：</label>
+            {{ obj.username }}
             {% if obj.errors.username.0 %}
             <div class="alert alert-danger" role="alert">
               {{ obj.errors.username.0 }}
@@ -22,7 +23,8 @@
             {% endif %}
           </div>
           <div class="form-group col col-md-8 mb-4">
-            <label for="inputPassword">密码：{{ obj.password }}</label>
+            <label for="{{ obj.password.id_for_label }}">{{ obj.password.label }}：</label>
+            {{ obj.password }}
             {% if obj.errors.password.0 %}
             <div class="alert alert-danger" role="alert">
               {{ obj.errors.password.0 }}
@@ -30,7 +32,8 @@
             {% endif %}
           </div>
           <div class="form-group col col-md-8 mb-4">
-            <label for="inputPassword2">确认密码：{{ obj.re_password }}</label>
+            <label for="{{ obj.re_password.id_for_label }}">{{ obj.re_password.label }}：</label>
+            {{ obj.re_password }}
             {% if obj.errors.re_password.0 %}
             <div class="alert alert-danger" role="alert">
               {{ obj.errors.re_password.0 }}
@@ -38,7 +41,8 @@
             {% endif %}
           </div>
           <div class="form-group col col-md-6 mb-4">
-            <label for="inputEmail">邮箱：{{ obj.email }}</label>
+            <label for="{{ obj.email.id_for_label }}">{{ obj.email.label }}：</label>
+            {{ obj.email }}
             {% if obj.errors.email.0 %}
             <div class="alert alert-danger" role="alert">
               {{ obj.errors.email.0 }}
@@ -46,7 +50,8 @@
             {% endif %}
           </div>
           <div class="form-group col col-md-6 mb-4">
-            <label for="inputMobile">联系方式：{{ obj.phone }}</label>
+            <label for="{{ obj.phone.id_for_label }}">{{ obj.phone.label }}：</label>
+            {{ obj.phone }}
             {% if obj.errors.phone.0 %}
             <div class="alert alert-danger" role="alert">
               {{ obj.errors.phone.0 }}
@@ -54,7 +59,8 @@
             {% endif %}
           </div>
           <div class="form-group col col-md-6 mb-4">
-            <label for="inputName">真实姓名：{{ obj.name }}</label>
+            <label for="{{ obj.name.id_for_label }}">{{ obj.name.label }}：</label>
+            {{ obj.name }}
             {% if obj.errors.name.0 %}
             <div class="alert alert-danger" role="alert">
               {{ obj.errors.name.0 }}
@@ -62,7 +68,8 @@
             {% endif %}
           </div>
           <div class="form-group col col-md-6 mb-4">
-            <label for="inputStudentID">学号：{{ obj.school_num }}</label>
+            <label for="{{ obj.school_num.id_for_label }}">{{ obj.school_num.label }}：</label>
+            {{ obj.school_num }}
             {% if obj.errors.username.0 %}
             <div class="alert alert-danger" role="alert">
               {{ obj.errors.username.0 }}
@@ -70,7 +77,8 @@
             {% endif %}
           </div>
           <div class="form-group col col-md-6 mb-4">
-            <label for="inputSchool">校区：{{ obj.school }}</label>
+            <label for="{{ obj.school.id_for_label }}">{{ obj.school.label }}：</label>
+            {{ obj.school }}
           </div>
         </div>
 

@@ -1,39 +1,28 @@
-<!DOCTYPE html>
+{% extends 'homepage.html' %}
 
-<html>
-
-<head>
-
-    <meta charset="UTF-8">
-
-     {% extends 'homepage.html' %}
-
-    <title>搜索结果</title>
-
-</head>
-
-<body>
-
-
-	{% block base%}
-
-    <hr>
-
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  {% if books %}
+  <div class="row d-flex flex-wrap flex-md-nowrap my-3">
     {% for book in books %}
-
-	<p><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></p>
-
-	<h3>{{ book.full_title }}</h3>
-	
-	<p>{{ book.authors }}</p>
-
-         <a href="{% url 'book_detail' book.id %}">查看详情</a>
-
-     {% endfor %}
-     <p>没找到想要的书籍？<a href="{% url 'create_new_book' %}">点此上架</a></p>	
-	{% endblock %}
-
-
-</body>
-
-</html>
+    <div class="card col-md-3">
+      <img src="{{ book.picture.url }}" class="card-img-top">
+      <div class="card-body">
+        <p class="card-text h5">{{ book.full_title }}</p>
+        <p class="card-text">作者：{{ book.authors }}</p>
+        <a class="btn btn-sm btn-primary" role="button" href="{% url 'book_detail' book.id %}">查看详情</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="alert alert-warning text-center my-3">暂无上架书籍，敬请期待</p>
+  {% endif %}
+  
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'create_new_book' %}">没有找到想要的书籍？点此上传新书</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

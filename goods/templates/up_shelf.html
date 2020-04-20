@@ -1,41 +1,52 @@
-<!DOCTYPE html>
+{% extends 'homepage.html' %}
 
-<html lang="en">
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <div class="row justify-content-center">
+    <div class="col col-md-8">
+      <h3 class="text-center mt-3 my-5">新书上架</h3>
 
-<head>
+      <form action="{% url 'up_shelf' book.pk %}" method="POST" enctype="multipart/form-data">
+        <div class="row">
+          <div class="form-group col-8 mb-4">
+            <label for="{{ obj.price.id_for_label }}">{{ obj.price.label }}：</label>
+            {{ obj.price }}
+            {% if obj.errors.price.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.price.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col-10 mb-4">
+            <label for="{{ obj.description.id_for_label }}">{{ obj.description.label }}：</label>
+            {{ obj.description }}
+            {% if obj.errors.description.0 %}
+            <div class="alert alert-danger" role="alert">
+              {{ obj.errors.description.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="InputPic1">图片上传（必）</label>
+            <input type="file" class="form-control-file" id="InputPic1" name="pic1">
+          </div>
+          <div class="form-group col col-md-6 mb-4">
+            <label for="InputPic2">图片上传（可选）</label>
+            <input type="file" class="form-control-file" id="InputPic2" name="pic2">
+          </div>
+        </div>
 
-    <meta charset="UTF-8">
+        {% if messages %}
+        <ul class="list-unstyled">
+          {% for message in messages %}
+          <li class="alert alert-{{ message.tags }} text-center my-3">{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
 
-     {% extends 'homepage.html' %}
-
-    <title>增加书籍信息</title>
-
-</head>
-
-<body>
-
-    {% block base%}
-   <h3>增加书籍信息</h3>
-    <hr>
-
-    <form action="{% url 'up_shelf' book.pk %}" method="POST" enctype="multipart/form-data">
-
-      <table>
-
-      <p>上架价格：{{ obj2.price }}</p>
-      <p>商品描述：{{ obj2.description }}</p>
-
-      <p>上传图片（必填）：  <input type="file" name="pic1"></p>
-
-      <p>上传图片（选填）：  <input type="file" name="pic2"></p>
-
-    </table>
-
-    <input type="submit" value="提交"> 
-
-    </form>
-    {% endblock %}
-
-</body>
-
-</html>
+        <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">确定提交</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}

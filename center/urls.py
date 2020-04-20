@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import *
 from django.contrib.auth.models import User
+
+from .views import *
+
 
 urlpatterns = [
     # http://localhost:8000/center/user_id

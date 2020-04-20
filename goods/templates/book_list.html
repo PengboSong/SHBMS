@@ -1,42 +1,18 @@
+{% extends 'homepage.html' %}
 
-<!DOCTYPE html>
-
-<html>
-
-<head>
-	{% extends 'homepage.html' %}
-
-    <meta charset="UTF-8">
-
-    <title>书籍列表（测试用）</title>
-
-</head>
-
-<body>
-
-
-	{% block base%}
-
-    <hr>
-
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <div class="card col-md-3">
     {% for book in books %}
-
-      
-
-        <h3>{{ book.full_title }}</h3>    
-
-        <p>作者：{{ book.authors }}</p>
-        <p><img src="{{ book.picture.url}}"  alt="" height="35%" width="18%"></p>
-        <a href="{% url 'book_detail' book.pk %}">查看详情</a>
-
-    {% empty %}
-
-        <p>-- 暂无上架书籍，敬请期待 --</p>
-
-    {% endfor %}
-
-    {% endblock %}
-
-</body>
-
-</html>
+    <img src="{{ item.picture.url }}" class="card-img-top">
+    <div class="card-body">
+      <p class="card-text h5">{{ item.full_title }}</p>
+      <p class="card-text">作者：{{ item.authors }}</p>
+      <a class="btn btn-sm btn-primary" role="button" href="{% url 'book_detail' book.pk %}">查看详情</a>
+      {% empty %}
+      <p>-- 暂无上架书籍，敬请期待 --</p>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}

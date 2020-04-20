@@ -2,9 +2,9 @@ from random import Random # 用于生成随机码
 from django.core.mail import send_mail  # 发送邮件模块
 from .models import EmailVerifyRecord  # 邮箱验证model
 from SHBMS.settings import EMAIL_FROM  # setting.py添加的的配置信息
+
+
 # 生成随机字符串
-
-
 def random_str(randomlength=8):
     str = ''
     chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
