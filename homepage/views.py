@@ -68,11 +68,16 @@ class HomePageView(TemplateView):
 
         context['sub_categories'] = sub_categories
         context['book_types'] = book_types
-        context['book_type_names'] = [book_type.type_name for book_type in book_types]
-        context['top_books'] = sort_book(Book.objects.all())
+        context['top_books_all'] = sort_book(Book.objects.all())
+        context['top_books'] = []
         for book_type in book_types:
-            book_with_type = Book.objects.filter(Q(book_type=book_type) & Q(book_status=1))
-            context[book_type.type_name] = sort_book(book_with_type)
+            books_with_type = Book.objects.filter(Q(book_type=book_type) & Q(book_status=1))
+            context['top_books'].append(
+                {
+                    "name": book_type.type_name,
+                    "books": sort_book(books_with_type),
+                }
+            )
         return context
 
 # 搜索界面，可以按照isbn编号或者书本标题进行搜索

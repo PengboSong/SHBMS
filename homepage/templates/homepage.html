@@ -25,8 +25,8 @@
 {% if user.is_authenticated %}
 
 {% block topbar %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light pb-2 mb-2">
-  <a class="navbar-brand" href="{% url 'home' %}">二手书交易平台</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark pb-2 mb-2">
+  <a class="navbar-brand" href="{% url 'home' %}">BRAND</a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarContents" aria-controls="navbarContents" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -34,7 +34,7 @@
   <div class="collapse navbar-collapse" id="navbarContents">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'home' %}">首页</span></a>
+        <a class="nav-link" href="{% url 'home' %}">首页</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'personal_center' user.pk %}">个人中心</a>
@@ -47,7 +47,30 @@
       <input class="form-control mr-sm-2" name="book_index" type="text" placeholder="书名 / ISBN号" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-md-0" type="submit" value="submit_search_query">搜索</button>
     </form>
-    <a class="btn btn-primary my-2 my-md-0" role="button" href="{% url 'logout' %}" type="submit">退出登录</a>
+    <button class="btn btn-outline-danger my-2 my-md-0" type="button" data-toggle="modal" data-target="#confirmLogout">
+      退出登录
+    </button>
+
+    <div class="modal fade" id="confirmLogout" data-backdrop="static" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <p class="modal-title h4">您确定要退出登录吗？</p>
+          </div>
+          <div class="modal-body">
+            <p>退出登录将无法继续访问网站</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">
+              取消
+            </button>
+            <a class="btn btn-danger" role="button" href="{% url 'logout' %}">
+              确认退出
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </nav>
 {% endblock %}
@@ -85,7 +108,7 @@
       <div class="d-flex flex-wrap flex-md-nowrap align-items-center">
         <div id="carouselNotices" class="carousel slide" data-ride="carousel">
           <ol class="carousel-indicators">
-            {% for book in top_books %}
+            {% for book in top_books_all %}
             {% if forloop.counter == 1 %}
             <li data-target="#carouselNotices" data-slide-to="{{ forloop.counter }}" class="active"></li>
             {% else %}
@@ -94,7 +117,7 @@
             {% endfor %}
           </ol>
           <div class="carousel-inner">
-            {% for book in top_books %}
+            {% for book in top_books_all %}
             {% if forloop.counter == 1 %}
             <div class="carousel-item active">
             {% else %}
@@ -127,23 +150,34 @@
         </div>
       </div>
       <div>
-        <h1 class="border-top mt-4 pt-2">畅销图书</h1>
-        <div class="btn-toolbar" role="toolbar">
-          <div class="btn-group btn-group-sm" role="group">
+        <p class="border-top h2 mt-4 pt-2">畅销图书</h1>
+        <nav class="navbar sticky-top navbar-light bg-light" id="book_type_nav">
+          <ul class="nav nav-pills">
             {% for book_type in book_types %}
-            <button type="button" class="btn btn-secondary">{{ book_type.type_name }}</button>
+            <li class="nav-item">
+              <a class="nav-link" href="#畅销图书-{{ book_type.type_name }}">
+                {{ book_type.type_name }}
+              </a>
+            </li>
             {% endfor %}
-          </div>
-        </div>
-        <div class="row d-flex flex-wrap flex-md-nowrap my-3">
-          {% for item in book_type_names.first %}
-          <div class="card col-md-3">
-            <img src="{{ item.picture.url }}" class="card-img-top">
-            <div class="card-body">
-              <p class="card-text h5">{{ item.full_title }}</p>
-              <p class="card-text">作者：{{ item.authors }}</p>
-              <a class="btn btn-sm btn-primary" role="button" href="{% url 'book_detail' item.pk %}">查看详情</a>
+          </ul>
+        </nav>
+        <div data-spy="scroll" data-target="#book_type_nav" data-offset="0" style="height:30rem; overflow:auto; position:relative;">
+          {% for category in top_books %}
+          <p class="border-top h4 mt-3 pt-2" id="畅销图书-{{ category.name }}">{{ category.name }}</p>
+          <div class="row d-flex flex-wrap flex-md-nowrap my-3">
+            {% for book in category.books %}
+            <div class="col col-md-4">
+              <div class="card mx-5">
+                <img class="card-img-top" src="{{ book.picture.url }}">
+                <div class="card-body">
+                  <p class="card-text h5">{{ book.full_title }}</p>
+                  <p class="card-text">作者：{{ book.authors }}</p>
+                  <a class="btn btn-sm btn-primary" role="button" href="{% url 'book_detail' book.pk %}">查看详情</a>
+                </div>
+              </div>
             </div>
+            {% endfor %}
           </div>
           {% endfor %}
         </div>
@@ -155,7 +189,20 @@
 
 {% else %}
 
-<p>您未登录，<a href="{% url 'login' %}">点此登录</a></p>
+<div class="container">
+  <div class="row justify-content-center my-5">
+    <div class="col col-md-6">
+      <div class="card d-block">
+        <p class="card-title text-center h3 mt-4">您还未登录</p>
+        <p class="card-text text-center mt-3 mb-5">登录以查看网站内容</p>
+        <div class="row justify-content-around mb-4">
+          <a href="{% url 'login' %}" class="btn btn-lg btn-primary" role="button">登录</a>
+          <a href="{% url 'register' %}" class="btn btn-lg btn-info" role="button">注册</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endif %}
 
