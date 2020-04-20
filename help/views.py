@@ -19,7 +19,7 @@ class NoticeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         notice_id = context["notice_id"]
-        context["article"] = get_object_or_404(Notice, pk=notice_id)
+        context["notice"] = get_object_or_404(Notice, pk=notice_id)
         return context
 
 class GuideView(TemplateView):

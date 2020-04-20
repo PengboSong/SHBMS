@@ -1,21 +1,32 @@
-{% extends 'blank.html' %}
+{% extends 'my_book.html' %}
 
 {% block title %}二手书交易平台 - 卖出图书{% endblock %}
 
-{% block content %}
-<body>
-  <form action="{% url 'sell_good' target_good.pk %}" method="POST" enctype="multipart/form-data">
-    <p>商品名称: {{ target_good.book.full_title }}</p>
-    <p>买家:
-      {% for buyer in buyers %}
-      <select name="buyer">
-        <option value={{ buyer.pk}}>{{ buyer.username }}</option>
-      </select>
-      {% empty %}
-      <p>暂无用户想要购买此书，敬请期待。</p>
-      {% endfor %}
-    </p>
-    <input type="submit" value="确定" />
-  </form>
-</body>
+{% block mainbody %}
+<main role="main" class="col-md-10 ml-sm-auto px-2">
+  <div class="row justify-content-center my-5">
+    <div class="col col-md-8">
+      <div class="card d-block">
+        <a class="btn btn-lg btn-success mt-4 ml-3" role="button" href="{% url 'my_book' user_id %}">返回</a>
+        <p class="card-title text-word-wrap text-center h3 mt-3 mb-5">您正在确认卖出 {{ target_good.book.full_title }}</p>
+        <form class="mx-4" method="POST" action="{% url 'sell_good' target_good.pk %}">
+          {% if buyers %}
+          <p>买家:
+            <select name="buyer">
+              {% for buyer in buyers %}
+              <option value="{{ buyer.pk }}">{{ buyer.username }}</option>
+              {% endfor %}
+            </select>
+          </p>
+          <div class="row justify-content-center mt-4 mb-5">
+            <input class="btn btn-lg btn-outline-danger" role="button" type="submit" value="确定" />
+          </div>
+          {% else %}
+          <p class="alert alert-warning text-center my-3">{{ user.username }}，暂无用户想要购买此书</p>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

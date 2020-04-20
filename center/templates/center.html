@@ -2,14 +2,6 @@
 
 {% block title %}二手书交易平台 - 个人中心{% endblock %}
 
-{% block style %}
-<style>
-  .portrait-cycle {
-    border-radius: 100%;
-  }
-</style>
-{% endblock %}
-
 {% block sidebar %}
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
   <div class="sidebar-sticky">
@@ -49,7 +41,7 @@
   <div class="row">
     <div class="col-md-2">
       <img src="{% static 'image/sample_portrait001.jpg' %}" class="portrait-cycle" width="100%">
-      <p class="text-center">{{ my_account.user.username }}</p>
+      <p class="text-center h4 mt-3">{{ my_account.user.username }}</p>
       <a class="btn btn-outline-success btn-block" role="button" href="{% url 'personal_info' user.pk %}">查看个人信息</a>
     </div>
     <div class="col">
@@ -93,7 +85,7 @@
             </td>
             <td><strong>{{ trans_record.goods.full_title }}</strong></td>
             <td>{{ trans_record.seller.username }}</td>
-            <td>{{ trans_record.customer.username }}</td>
+            <td>{{ trans_record.buyer.username }}</td>
             <td>{{ trans_record.price }}</td>
             <td>{{ trans_record.order_time }}</td>
           </tr>

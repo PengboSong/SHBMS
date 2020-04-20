@@ -96,24 +96,24 @@ class LoginView(TemplateView):
         context = super().get_context_data(**kwargs)
         username = request.POST.get('username', '')
         if not username:
-            messages.warning(self.request, "用户名不能为空")
+            messages.warning(request, "用户名不能为空")
             return self.render_to_response(context)
 
         password = request.POST.get('password', '')
         if not password:
-            messages.warning(self.request, "密码不能为空")
+            messages.warning(request, "密码不能为空")
             return self.render_to_response(context)
         
         user = auth.authenticate(request, username=username, password=password)
         if user is None:
-            messages.error(self.request, "用户名或密码不正确")
+            messages.error(request, "用户名或密码不正确")
         else:
             auth.login(request, user)
             return redirect('/')
 
 def logout(request):
     auth.logout(request)
-    return HttpResponse('登出成功')
+    return redirect('/')
 
 class RegisterView(TemplateView):
     template_name = "register.html"
@@ -146,7 +146,8 @@ class RegisterView(TemplateView):
             post_obj.status = 1
             post_obj.user = user
             post_obj.save()
-            return redirect('/')
+            
+        return redirect('/')
 
 
 def check_email(request):

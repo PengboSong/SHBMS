@@ -19,7 +19,8 @@
           <label for="inputPassword">密码：</label>
           <input class="form-control" type="password" id="inputPassword" name="password" required>
         </div>
-        <div class="row justify-content-around mb-3">
+        <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">登录</button>
+        <div class="row justify-content-around mb-5">
           <a class="btn btn-info my-3" role="button" href="{% url 'check_email' %}">忘记密码</a>
           <a class="btn btn-info my-3" role="button" href="{% url 'register' %}">没有账户？现在注册</a>
         </div>
@@ -32,7 +33,6 @@
         </ul>
         {% endif %}
 
-        <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">登录</button>
       </form>
     </div>
   </div>

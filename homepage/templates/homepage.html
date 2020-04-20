@@ -18,7 +18,17 @@
     <!-- Custom styles for this template -->
     <!-- link rel="stylesheet" href="index.css" -->
     {% block style %}
-    <style></style>
+    <style>
+      .portrait-cycle {
+        border-radius: 100%;
+      }
+    
+      .text-word-wrap {
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow: hidden;
+      }
+    </style>
     {% endblock %}
   </head>
 <body class="bg-light">
@@ -197,6 +207,7 @@
         <p class="card-text text-center mt-3 mb-5">登录以查看网站内容</p>
         <div class="row justify-content-around mb-4">
           <a href="{% url 'login' %}" class="btn btn-lg btn-primary" role="button">登录</a>
+          <a href="/admin/" class="btn btn-lg btn-danger" role="button">管理员登录</a>
           <a href="{% url 'register' %}" class="btn btn-lg btn-info" role="button">注册</a>
         </div>
       </div>

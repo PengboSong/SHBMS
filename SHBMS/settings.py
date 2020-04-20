@@ -150,11 +150,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'common_static'),
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'medias').replace('\\', '/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 MEDIA_URL = '/media/'
 
 # Email validation
-EMAIL_HOST = "smtp.qq.com "
+EMAIL_HOST = "smtp.qq.com"
 EMAIL_PORT = 25
 EMAIL_HOST_USER = "1738800750@qq.com"
 EMAIL_HOST_PASSWORD = "juumhgudgzxreieb"

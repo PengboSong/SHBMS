@@ -7,7 +7,7 @@
   <h2 class="border-bottom mt-4 pb-3">购书指南</h2>
   <div class="list-group mx-4 mt-3 mb-5">
     {% for article in articles %}
-    <a class="list-group-item list-group-item-action" href="{% url 'article' article.pk %}">{{ article.title }}</a>
+    <a class="text-word-wrap list-group-item list-group-item-action" href="{% url 'article' article.pk %}">{{ article.title }}</a>
     {% empty %}
     <p class="alert alert-warning text-center my-3">暂无文章</p>
     {% endfor %}

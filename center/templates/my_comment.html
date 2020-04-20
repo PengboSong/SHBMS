@@ -4,7 +4,7 @@
 
 {% block mainbody %}
 <main role="main" class="col-md-10 ml-sm-auto px-2">
-  <h2 class="border-top mt-4 pt-2">相关评论</h2>
+  <h2 class="border-top mt-4 pt-2">@我的评论</h2>
   {% if my_comments %}
   <ul class="list-unstyled my-3">
     {% for my_comment in my_comments %}
@@ -13,7 +13,7 @@
       <div class="media-body">
         <h5>{{ my_comment.from_id.pk }}@{{ my_comment.from_id.username }}</h5>
         <p class="border-bottom pb-3">评论时间：{{ my_comment.comment_time }}</p>
-        <p>{{ my_comment.content }}</p>
+        <p class="text-word-wrap">{{ my_comment.content }}</p>
         
         <div class="btn-group" role="group">
           {% if my_comment.picture %}
@@ -31,7 +31,7 @@
         {% if my_comment.picture %}
         <div class="collapse my-2 w-50" id="comment_pic_{{ my_comment.pk }}">
           <div class="card card-body">
-            <img src="#" width="120" alt="">
+            <img src="{{ my_comment.picture.url }}" width="120" alt="">
           </div>
         </div>
         {% endif %}
@@ -49,6 +49,14 @@
   </ul>
   {% else %}
   <p class="alert alert-warning text-center my-3">{{ user.username }}，您暂无收到的评论</p>
+  {% endif %}
+
+  {% if messages %}
+  <ul class="list-unstyled">
+    {% for message in messages %}
+    <li class="alert alert-{{ message.tags }} text-center my-3">{{ message }}</li>
+    {% endfor %}
+  </ul>
   {% endif %}
 </main>
 {% endblock %}
