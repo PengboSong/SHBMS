@@ -3,10 +3,10 @@ from .models import *
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'content')
+    list_display = ('id', 'title', 'content')
 
 class NoticeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'content', 'comment_time')
+    list_display = ('id', 'title', 'content', 'comment_time')
     ordering = ('-comment_time',)
 
 admin.site.register(Article, ArticleAdmin)

@@ -8,7 +8,7 @@
     <div class="col col-md-8">
       <div class="card d-block">
         <a class="btn btn-lg btn-success mt-4 ml-3" role="button" href="{% url 'my_book' user_id %}">返回</a>
-        <p class="card-title text-word-wrap text-center h3 mt-3 mb-5">您正在确认卖出 {{ target_good.book.full_title }}</p>
+        <p class="card-title text-word-wrap text-center h3 mt-3 mb-5">您正在确认卖出 《{{ target_good.book.full_title }}》</p>
         <form class="mx-4" method="POST" action="{% url 'sell_good' target_good.pk %}">
           {% if buyers %}
           <p>买家:

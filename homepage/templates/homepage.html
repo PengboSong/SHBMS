@@ -197,6 +197,44 @@
   </div>
 </div>
 
+{% block footer %}
+<footer class="border-top mt-4 pt-2 pb-4">
+  <p class="d-block text-muted text-center">&copy; 2020 李雅歌 石冰宁</p>
+  <div class="row">
+    <div class="col-6 col-md-4">
+      <h5 class="text-center">如何购书</h5>
+      <ul class="list-unstyled text-small text-center">
+        <li><a class="text-muted" href="{% url 'article' 2 %}">如何购书</a></li>
+        <li><a class="text-muted" href="{% url 'article' 10 %}">购书流程</a></li>
+        <li><a class="text-muted" href="{% url 'article' 16 %}">购书时怎么支付</a></li>
+        <li><a class="text-muted" href="{% url 'article' 6 %}">买的书多长时间到货</a></li>
+        <li><a class="text-muted" href="{% url 'article' 14 %}">怎样退换货</a></li>
+        <li><a class="text-muted" href="{% url 'article' 5 %}">交易遇到问题怎么办</a></li>
+      </ul>
+  </div>
+  <div class="col-6 col-md-4">
+    <h5 class="text-center">上/下架书籍</h5>
+    <ul class="list-unstyled text-small text-center">
+      <li><a class="text-muted" href="{% url 'article' 3 %}">怎么上架新书</a></li>
+      <li><a class="text-muted" href="{% url 'article' 9 %}">如何下架书籍</a></li>
+      <li><a class="text-muted" href="{% url 'article' 12 %}">怎样修改书籍信息</a></li>
+      <li><a class="text-muted" href="{% url 'article' 4 %}">如何完成交易</a></li>
+    </ul>
+  </div>
+  <div class="col-6 col-md-4">
+    <h5 class="text-center">关于我们</h5>
+    <ul class="list-unstyled text-small text-center">
+      <li><a class="text-muted" href="{% url 'article' 1 %}">关于我们</a></li>
+      <li><a class="text-muted" href="{% url 'article' 11 %}">网站特色</a></li>
+      <li><a class="text-muted" href="{% url 'article' 13 %}">销售图书质量及其来源</a></li>
+      <li><a class="text-muted" href="{% url 'article' 8 %}">个人账户实名制</a></li>
+      <li><a class="text-muted" href="{% url 'article' 7 %}">忘记密码怎么办</a></li>
+      <li><a class="text-muted" href="{% url 'article' 15 %}">如何修改个人信息</a></li>
+    </ul>
+  </div>
+</footer>
+{% endblock %}
+
 {% else %}
 
 <div class="container">
@@ -216,55 +254,5 @@
 </div>
 
 {% endif %}
-
-{% block footer %}
-<footer class="border-top mt-4 pt-2 pb-4">
-  <div class="row">
-    <div class="col-12 col-md-3">
-      <p class="d-block text-muted text-center">&copy; 2020 Group Members</p>
-    </div>
-    <div class="col-6 col-md-2">
-      <h5 class="text-center">Block I</h5>
-      <ul class="list-unstyled text-small text-center">
-        <li><a class="text-muted" href="#">Term I</a></li>
-        <li><a class="text-muted" href="#">Term II</a></li>
-        <li><a class="text-muted" href="#">Term III</a></li>
-        <li><a class="text-muted" href="#">Term IV</a></li>
-        <li><a class="text-muted" href="#">Term V</a></li>
-      </ul>
-  </div>
-  <div class="col-6 col-md-2">
-    <h5 class="text-center">Block II</h5>
-    <ul class="list-unstyled text-small text-center">
-      <li><a class="text-muted" href="#">Term I</a></li>
-      <li><a class="text-muted" href="#">Term II</a></li>
-      <li><a class="text-muted" href="#">Term III</a></li>
-      <li><a class="text-muted" href="#">Term IV</a></li>
-      <li><a class="text-muted" href="#">Term V</a></li>
-    </ul>
-  </div>
-  <div class="col-6 col-md-2">
-    <h5 class="text-center">Block III</h5>
-    <ul class="list-unstyled text-small text-center">
-      <li><a class="text-muted" href="#">Term I</a></li>
-      <li><a class="text-muted" href="#">Term II</a></li>
-      <li><a class="text-muted" href="#">Term III</a></li>
-      <li><a class="text-muted" href="#">Term IV</a></li>
-      <li><a class="text-muted" href="#">Term V</a></li>
-    </ul>
-  </div>
-  <div class="col-6 col-md-2">
-    <h5 class="text-center">Block IV</h5>
-    <ul class="list-unstyled text-small text-center">
-      <li><a class="text-muted" href="#">Term I</a></li>
-      <li><a class="text-muted" href="#">Term II</a></li>
-      <li><a class="text-muted" href="#">Term III</a></li>
-      <li><a class="text-muted" href="#">Term IV</a></li>
-      <li><a class="text-muted" href="#">Term V</a></li>
-    </ul>
-  </div>
-</footer>
-{% endblock %}
 </body>
-
 </html>
